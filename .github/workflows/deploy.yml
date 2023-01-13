@@ -10,20 +10,24 @@
 #
 name: Deploy Site
 
-on:
-  push:
-    paths: 
-    - 'docs/**'
-    - 'mkdocs.yml'
-    - 'theme/**'
-    branches:
-    - master
-    #
-    # If your repository would have releases should you uncomment the below lines
-    # in order to ignore pushes caused by newly created releases.
-    #
-    #tags-ignore:
-    #- '**'
+on: [push, pull_request]
+permissions:
+  contents: write
+  
+# on:
+#   push:
+#     paths: 
+#     - 'docs/**'
+#     - 'mkdocs.yml'
+#     - 'theme/**'
+#     branches:
+#     - master
+#     #
+#     # If your repository would have releases should you uncomment the below lines
+#     # in order to ignore pushes caused by newly created releases.
+#     #
+#     #tags-ignore:
+#     #- '**'
 
 jobs:
   build:
