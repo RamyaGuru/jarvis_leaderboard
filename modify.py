@@ -14,10 +14,10 @@ filedata = filedata.replace('MkDocs', 'JARVIS-Leaderboard')
 with open(index_path, 'w') as file:
   file.write(filedata)
 
-"""
-f=open('docs/index.md','r')
-lines=f.read().splitlines()
-f.close()
-for i in lines:
- print (i)
-"""
+# """
+# f=open('docs/index.md','r')
+# lines=f.read().splitlines()
+# f.close()
+# for i in lines:
+#  print (i)
+# """
