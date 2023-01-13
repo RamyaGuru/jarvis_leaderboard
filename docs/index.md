@@ -1,118 +1,46 @@
-[use]: https://github.com/Andre601/mkdocs-template/generate
-
-[MkDocs]: https://www.mkdocs.org/
-
-[squidfunk]: https://github.com/squidfunk
-[MkDocs Material Theme]: https://github.com/squidfunk/mkdocs-material
-
-[facelessuser]: https://github.com/facelessuser
-[PyMdown Extensions]: https://github.com/facelessuser/pymdown-extensions/
-
-[Netlify]: https://netlify.com
-
-[mkdocs.yml]: https://github.com/Andre601/mkdocs-template/blob/master/mkdocs.yml
-[docs folder]: https://github.com/Andre601/mkdocs-template/blob/master/docs
-[workflow]: https://github.com/Andre601/mkdocs-template/blob/master/.github/workflows/deploy.yml
-
-[LICENSE]: https://github.com/Andre601/mkdocs-template/blob/master/LICENSE
-
-# MkDocs Material Template
-This is a template repository for anyone that wants to use the MkDocs Material Theme.
 
 
-<h2>A basic HTML table</h2>
+[LICENSE]: https://github.com/usnistgov/jarvis/blob/master/LICENSE.rst
 
-<table style="width:100%">
-  <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>2</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>1</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>3</td>
-  </tr>
-</table>
+# JARVIS Leaderboard
+This project benchmarks performances of various methods for materials science applications using the datasets available in [JARVIS-Tools databases](https://jarvis-tools.readthedocs.io/en/master/databases.html).
+In addition to prediction results, we attempt to capture the underlyig software and harware frameworks in training models to enhance reproducibility.
+Currently, there are  x number of benchmarks available.
+
 
 
 
 ## Getting Started
-To get started, first clone this template by clicking on the Green button labeled [`Use this template`][use].  
-On the new screen, give your repository a name and make sure to check `Include all branches`. This will make sure that the `gh-pages` branch is included, or otherwhise publishing the docs to GitHub Pages could cause errors (See [Troubleshooting](#troubleshooting)).
 
-### Creating pages
-To create new pages, just add new markdown files to the [docs folder] of the repository and edit them.  
-MkDocs will then turn those into static HTML pages once you [build](#build-pages) or [deploy](#deploy-to-github) the pages.
+To get started, first fork this repository by clicking on the Fork button [`Fork`](https://github.com/knc6/jarvis_leaderboard/fork). 
+On the new screen, give your repository a name and make sure to check `Include all branches`/ uncehck `Copy the master branch only`. 
 
-The template also has some pre-made settings for you to help you with creating documentation much easier.  
-In the [mkdocs.yml] will you find many settings that you can alter. Please check the comments and the links they have for more info.
 
-It also contains some extensions that might be useful including:
 
-- Admonition
-- CodeHilite
-- ToC
-- [PyMdown Extensions]
 
-You're free to add, edit or remove any extension at your own discretion, but keep in mind that some expansions might caus compatibility issues with others.
 
-## Build Pages
-To build pages (locally) can you use the `mkdocs build` command in your prefered command prompt.  
-Note that for the successful execution of this command you have to...
+## Adding new model benchmarks
+To add a new benchmark, 
 
-- ...be in the folder that contains the `mkdocs.yml`
-- ...have Python 3.7 installed
-- ...have MkDocs and all required dependencies such as Material for MkDocs installed.  
-Note that Material for MkDocs automatically downloads MkDocs and also certain extensions such as the [PyMdown Extensions].
+1) Cretae a folder in the `benchmarks` folder e.g. `my_benchmarks`. 
 
-MkDocs would now build the HTML in the defined configuration folder for you to use.
+2) In the `my_benchmarks` folder, add comma-separated (`.csv`) file(s) corresponding to benchmark(s), 
+e.g. `test-exfoliation_energy-dft_2d-ai-mae.csv` for `exfoliation_energy` in `dft_2d` dataset for `test` split using an `ai` (artificial intelligence method) with 
+`mae` (mean absolute error) metric. Therefore, the filename should have these five components. 
 
-## Deploy to GitHub
-If you want to publish the pages on GitHub Pages can you use the [premade workflow][workflow] for this.  
-This workflow will setup Python, download Material for MkDocs and all its dependencies and deploy the pages to the `gh-pages` branch to then be viewable under `<username>.github.io/<repository>` (unless you defined a specific CNAME through a CNAME file in the [docs folder]).
+Note the word: test, property: exfoliation_energy, dataset: dft_2d, method: ai, metric: ai
+have been joined with '-' sign. This format should be used for consistency in webpage generation.
+The test data splits are pre-determined, if the exact test IDs are not used, then the code will result in errors. 
 
-Note that in order for this to work will you need to have a `gh-pages` branch already made.
 
-## Netlify
-Netlify is an amazing service to build and deploy pages. This template comes with a `runtime.txt` which is used by Netlify to determine the Python version used (They use an old version of Python... Don't ask why).
+3) Add at least two columns: `id` and `prediction` in the csv file using your model. The `rebuild_page.py` script will parse the data in the csv file, and
+will calculate and analyze several metrics. The `id `should be identifier in the test split set and `prediction` is your model prediction.
 
-For more information, please check out their website.
+An example, `my_benchmarks_test` is added in the GitHub repo for demo purpose only. 
+We recommend to name this folder as your model name, e.g. `alignn_models`, `cfid_models`, `cgcnn_models` etc. 
 
-## Troubleshooting
-> **The deploy action gives me an error when deploying. What is the issue?**
-
-There can be many issues but the most common ones are that you either don't have a `gh-pages` branch set or that the `requirements.txt` file is missing or its content is invalid.
-
-> **Can I alter the overall style of the pages?**
-
-Yes. Material for MkDocs supports Theme extensions, meaning you can override specific parts of a theme by providing the particula file in a folder and defining this folder as the `custom_dir` one in the [mkdocs.yml].  
-This template ships with a `theme` folder that can be used for that and you can just uncomment the aforementioned line in the YAML file.
-
-## Dependabot
-The repository contains a `dependabot.yml` file inside the `.github` folder which allows automatic updates through GitHub's Dependabot.  
-It is configured to target both Python dependencies (inside the `requirements.txt`) and GitHub Actions dependencies, to make sure bot are updated accordingly.
-
-Note that it is configured by default to add the `Type: Update (Dependency)` label and also the `Target: Python (pip)` label for Python and `Target: GitHub Actions` label for GitHub Actions Dependencies.  
-Those labels don't exist by default so you have to either create them, or alter the ones in the dependabot.yml (You can also just remove the `labels` sections).
-
-## Credits
-A big thank you goes to the following people/groups:
-
-- [MkDocs] for providing the software, to generate documentation.
-- [squidfunk] for the [MkDocs Material Theme].
-- [facelessuser] for the [PyMdown Extensions].
+3) Make a pull-request to the original repo.
 
 ## License
-This template is served under the MIT license.  
+This template is served under the NIST license.  
 Read the [LICENSE] file for more info.
