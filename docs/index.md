@@ -31,12 +31,17 @@ This is a template repository for anyone that wants to use the MkDocs Material T
   <tr>
     <td>Alfreds Futterkiste</td>
     <td>Maria Anders</td>
-    <td>Germany</td>
+    <td>2</td>
   </tr>
   <tr>
     <td>Centro comercial Moctezuma</td>
     <td>Francisco Chang</td>
-    <td>Mexico</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>3</td>
   </tr>
 </table>
 
