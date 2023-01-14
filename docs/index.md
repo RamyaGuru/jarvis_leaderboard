@@ -4,7 +4,7 @@
 
 # JARVIS Leaderboard
 This project benchmarks performances of various methods for materials science applications using the datasets available in [JARVIS-Tools databases](https://jarvis-tools.readthedocs.io/en/master/databases.html).
-In addition to prediction results, we attempt to capture the underlyig software and harware frameworks in training models to enhance reproducibility.
+In addition to prediction results, we attempt to capture the underlyig software and hardware frameworks in training models to enhance reproducibility.
 Currently, there are  x number of benchmarks available.
 
 
@@ -22,7 +22,7 @@ On the new screen, give your repository a name and make sure to check `Include a
 ## Adding new model benchmarks
 To add a new benchmark, 
 
-1) Cretae a folder in the `benchmarks` folder e.g. `my_benchmarks`. 
+1) Create a folder in the `benchmarks` folder e.g. `my_benchmarks`. 
 
 2) In the `my_benchmarks` folder, add comma-separated (`.csv`) file(s) corresponding to benchmark(s), 
 e.g. `test-exfoliation_energy-dft_2d-ai-mae.csv` for `exfoliation_energy` in `dft_2d` dataset for `test` split using an `ai` (artificial intelligence method) with 
