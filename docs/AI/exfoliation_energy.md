@@ -20,7 +20,6 @@ This is a template repository for anyone that wants to use the MkDocs Material T
     <td>Francisco Chang</td>
     <td>3</td>
     <td>MAE</td>
-    <td>MAE</td>
     <td>3</td>
   </tr>
 </table>
