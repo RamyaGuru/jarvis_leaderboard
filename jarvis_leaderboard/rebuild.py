@@ -1,8 +1,10 @@
 import os
-
-print("Running modify.py script")
+from jarvis.db.jsonutils import loadjson
+from sklearn.metrics import mean_absolute_error
 import pandas as pd
 import glob
+
+print("Running modify.py script")
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 clean = True
@@ -39,6 +41,29 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
             content.append(j)
     with open(md_path, "w") as file:
         file.write("\n".join(content))
+# jarvis_leaderboard/dataset/AI/dft_3d_exfoliation_energy.json
+def get_metric_value(
+    csv_path="", dataset="", prop="", data_split="", method="", metric=""
+):
+
+    csv_data = pd.read_csv(csv_path)
+    # print ('csv_data',csv_data)
+    temp = dataset + "_" + prop + ".json"
+    fname = os.path.join("dataset", method, temp)
+    actual_data_json = loadjson(os.path.join(root_dir, fname))[data_split]
+    # print ('actual_data_json',actual_data_json)
+    ids = []
+    targets = []
+    for i, j in actual_data_json.items():
+        ids.append(i)
+        targets.append(j)
+    mem = {"id": ids, "actual": targets}
+    actual_df = pd.DataFrame(mem)
+    df = pd.merge(csv_data, actual_df, on="id")
+    if metric == "mae":
+        res = mean_absolute_error(df["actual"], df["prediction"])
+    return res
+
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
     fname = i.split("/")[-1].split(".csv")[0]
@@ -64,7 +89,16 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
     )
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
-    res = 5
+
+    res = get_metric_value(
+        csv_path=i,
+        dataset=dataset,
+        prop=prop,
+        data_split=data_split,
+        method=method,
+        metric=metric,
+    )
+    # res = 5
     # if clean:
 
     temp = (
