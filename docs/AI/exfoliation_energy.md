@@ -14,7 +14,7 @@ This is a template repository for anyone that wants to use the MkDocs Material T
     <th>Date submitted</th>
   </tr>
  </thead>
-  <!--table_content-->
+<!--table_content-->
   <tr>
     <td>Centro comercial Moctezuma</td>
     <td>Francisco Chang</td>
