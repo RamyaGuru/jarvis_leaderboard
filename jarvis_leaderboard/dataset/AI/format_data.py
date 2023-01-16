@@ -16,10 +16,11 @@ def preapre_json_file(
     train_val_test="ids_train_val_test.json",
 ):
     """Prepare json file given id,dataset and prop info."""
+    print('Usind ids_train_val_test.json',train_val_test)
     d = data(dataset)
     df = pd.DataFrame(d)
 
-    def get_val(id_tag=id_tag, prop="exfoliation_energy", jv_id="JVASP-14441"):
+    def get_val(id_tag=id_tag, prop=prop, jv_id="JVASP-14441"):
         """Get data from dataframe."""
         # print (df[df[id_tag]=='JVASP-14441'])
         # return df[df[id_tag]==id][prop].values[0]
@@ -33,15 +34,27 @@ def preapre_json_file(
     train_data = defaultdict()
     for i in train_ids:
         val = get_val(jv_id=i)
+        if val=='na':
+           print(i,val)
+           import sys
+           sys.exit()
         train_data[i] = val
 
     val_data = defaultdict()
     for i in val_ids:
         val = get_val(jv_id=i)
+        if val=='na':
+           print(i,val)
+           import sys
+           sys.exit()
         val_data[i] = val
     test_data = defaultdict()
     for i in test_ids:
         val = get_val(jv_id=i)
+        if val=='na':
+           print(i,val)
+           import sys
+           sys.exit()
         test_data[i] = val
 
     mem = {}
@@ -62,4 +75,4 @@ def preapre_json_file(
 
 
 if __name__ == "__main__":
-    preapre_json_file()
+    preapre_json_file(prop='formation_energy_peratom')

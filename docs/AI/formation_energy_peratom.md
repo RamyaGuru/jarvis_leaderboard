@@ -1,4 +1,4 @@
-# Model for exfoliation energy
+# Model for formation energy per atom
 
 <h2>Model benchmarks</h2>
 

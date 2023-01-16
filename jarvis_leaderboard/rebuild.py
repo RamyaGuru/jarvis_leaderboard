@@ -3,6 +3,8 @@ from jarvis.db.jsonutils import loadjson
 from sklearn.metrics import mean_absolute_error
 import pandas as pd
 import glob
+import zipfile
+import json
 
 print("Running modify.py script")
 
@@ -27,9 +29,17 @@ def get_metric_value(
     print("meta_path", meta_data)
     # meta_data=loadjson()
     print("csv_data", csv_path)
+    #dataset with actual values
     temp = dataset + "_" + prop + ".json"
-    fname = os.path.join("dataset", method, temp)
-    json_data = loadjson(os.path.join(root_dir, fname))
+    temp2 = temp + ".zip"
+    fname = os.path.join("dataset", method, temp2)
+    fname2 = (os.path.join(root_dir, fname))
+    
+    z=zipfile.ZipFile(fname2)
+    json_data=json.loads(z.read(temp))
+
+
+    #json_data = loadjson(os.path.join(root_dir, fname))
     actual_data_json = json_data[data_split]
     data_size = (
         len(json_data["train"])
@@ -53,8 +63,8 @@ def get_metric_value(
     return results
 
 
-for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
-    fname = i.split("/")[-1].split(".csv")[0]
+for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
+    fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     data_split = temp[0]
     prop = temp[1]
@@ -86,9 +96,9 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
     with open(md_path, "w") as file:
         file.write("\n".join(content))
 # jarvis_leaderboard/dataset/AI/dft_3d_exfoliation_energy.json
-
-for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
-    fname = i.split("/")[-1].split(".csv")[0]
+dat=[]
+for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
+    fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     data_split = temp[0]
     prop = temp[1]
@@ -98,6 +108,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
     team = i.split("/")[-2]
     md_filename = "../docs/" + method + "/" + prop + ".md"
     md_path = os.path.join(root_dir, md_filename)
+    notes=''
     print(
         fname,
         data_split,
@@ -126,6 +137,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
         '<a href="' + res["project_url"] + '" target="_blank">' + team + "</a>"
     )
     # team='['+team+']'+'('+res['project_url']+')'
+    info={}
     temp = (
         "<!--table_content-->"
         + "<tr>"
@@ -150,8 +162,14 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
         + "<td>"
         + str(res["date_submitted"])
         + "</td>"
+        + "<td>"
+        + str(notes)
+        + "</td>"
         + "</tr>"
     )
+    info['team']=team
+    info['result']=res
+    dat.append(info)
     content = []
     for j in filedata:
         if "<!--table_content-->" in j:
@@ -163,3 +181,5 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv"):
 
     with open(md_path, "w") as file:
         file.write("\n".join(content))
+
+print('dat',dat)
