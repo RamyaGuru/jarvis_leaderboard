@@ -58,7 +58,7 @@ def get_metric_value(
     df = pd.merge(csv_data, actual_df, on="id")
     results["res"] = "na"
     if metric == "mae":
-        res = round(mean_absolute_error(df["actual"], df["prediction"]), 2)
+        res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
         results["res"] = res
     return results
 
