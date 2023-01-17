@@ -13,7 +13,13 @@ clean = True
 
 
 def get_metric_value(
-    csv_path="", dataset="", prop="", data_split="", method="", metric=""
+    submod="",
+    csv_path="",
+    dataset="",
+    prop="",
+    data_split="",
+    method="",
+    metric="",
 ):
     results = {}
     csv_data = pd.read_csv(csv_path)
@@ -29,17 +35,16 @@ def get_metric_value(
     print("meta_path", meta_data)
     # meta_data=loadjson()
     print("csv_data", csv_path)
-    #dataset with actual values
+    # dataset with actual values
     temp = dataset + "_" + prop + ".json"
     temp2 = temp + ".zip"
-    fname = os.path.join("dataset", method, temp2)
-    fname2 = (os.path.join(root_dir, fname))
-    
-    z=zipfile.ZipFile(fname2)
-    json_data=json.loads(z.read(temp))
+    fname = os.path.join("dataset", method, submod, temp2)
+    fname2 = os.path.join(root_dir, fname)
 
+    z = zipfile.ZipFile(fname2)
+    json_data = json.loads(z.read(temp))
 
-    #json_data = loadjson(os.path.join(root_dir, fname))
+    # json_data = loadjson(os.path.join(root_dir, fname))
     actual_data_json = json_data[data_split]
     data_size = (
         len(json_data["train"])
@@ -66,13 +71,15 @@ def get_metric_value(
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
-    data_split = temp[0]
-    prop = temp[1]
-    dataset = temp[2]
-    method = temp[3]
-    metric = temp[4]
+    submod = temp[0]
+    data_split = temp[1]
+    prop = temp[2]
+    dataset = temp[3]
+    method = temp[4]
+    metric = temp[5]
     team = i.split("/")[-2]
-    md_filename = "../docs/" + method + "/" + prop + ".md"
+    # md_filename = os.path.join("../docs",method,submod,prop) #"../docs/" + method + "/" +submod+"/"+ prop + ".md"
+    md_filename = "../docs/" + method + "/" + submod + "/" + prop + ".md"
     md_path = os.path.join(root_dir, md_filename)
     # print(
     #    fname,
@@ -96,19 +103,20 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     with open(md_path, "w") as file:
         file.write("\n".join(content))
 # jarvis_leaderboard/dataset/AI/dft_3d_exfoliation_energy.json
-dat=[]
+dat = []
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
-    data_split = temp[0]
-    prop = temp[1]
-    dataset = temp[2]
-    method = temp[3]
-    metric = temp[4]
+    submod = temp[0]
+    data_split = temp[1]
+    prop = temp[2]
+    dataset = temp[3]
+    method = temp[4]
+    metric = temp[5]
     team = i.split("/")[-2]
-    md_filename = "../docs/" + method + "/" + prop + ".md"
+    md_filename = "../docs/" + method + "/" + submod + "/" + prop + ".md"
     md_path = os.path.join(root_dir, md_filename)
-    notes=''
+    notes = ""
     print(
         fname,
         data_split,
@@ -124,6 +132,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
         filedata = file.read().splitlines()
 
     res = get_metric_value(
+        submod=submod,
         csv_path=i,
         dataset=dataset,
         prop=prop,
@@ -137,7 +146,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
         '<a href="' + res["project_url"] + '" target="_blank">' + team + "</a>"
     )
     # team='['+team+']'+'('+res['project_url']+')'
-    info={}
+    info = {}
     temp = (
         "<!--table_content-->"
         + "<tr>"
@@ -167,8 +176,8 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
         + "</td>"
         + "</tr>"
     )
-    info['team']=team
-    info['result']=res
+    info["team"] = team
+    info["result"] = res
     dat.append(info)
     content = []
     for j in filedata:
@@ -182,4 +191,4 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     with open(md_path, "w") as file:
         file.write("\n".join(content))
 
-print('dat',dat)
+print("dat", dat)

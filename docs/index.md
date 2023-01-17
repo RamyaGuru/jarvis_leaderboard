@@ -19,16 +19,16 @@ On the new screen, give your repository a name and make sure to check `Include a
 
 
 
-## Adding new model benchmarks
+## Adding model benchmarks to existing dataset
 To add a new benchmark, 
 
-1) Create a folder in the `benchmarks` folder e.g. `xyz_model`. 
+1) Create a folder in the `jarvis_leaderboard/benchmarks` folder under respective submodule e.g. `xyz_model`. 
 
 2) In the `xyz_model` folder, add comma-separated zip file(`.csv.zip`) file(s) corresponding to benchmark(s), 
-e.g. `test-exfoliation_energy-dft_2d-AI-mae.csv.zip` for `exfoliation_energy` in `dft_3d` dataset for `test` split using an `AI` (artificial intelligence method) with 
-`mae` (mean absolute error) metric. Therefore, the filename should have these five components. 
+e.g. `PP-test-exfoliation_energy-dft_2d-AI-mae.csv.zip` for `exfoliation_energy` in `dft_3d` dataset for `test` split using an `AI` (artificial intelligence method) with 
+`mae` (mean absolute error) metric for `PP` (property prediction) task. Therefore, the filename should have these six components. 
 
-Note the word: test, property: exfoliation_energy, dataset: dft_3d, method: ai, metric: AI
+Note the word: `PP`:task type, `test`, property: `exfoliation_energy`, dataset: `dft_3d`, method: `AI`, metric: `mae`
 have been joined with '-' sign. This format should be used for consistency in webpage generation.
 The test data splits are pre-determined, if the exact test IDs are not used, then the code might result in errors. 
 
@@ -40,6 +40,14 @@ We recommend to name this folder as your model name, e.g. `alignn_models`, `cfid
 
 3) Make a pull-request to the original repo.
 
+## Adding model benchmarks to new dataset
+To add a new dataset
+
+1) Create a `json.zip` file in the `jarvis_leaderboard/dataset` folder under respective submodule e.g. `jarvis_leaderboard/dataset/AI/PP/dft_3d_exfoliation_energy.json.zip`.
+
+2) In the `.json` file should have `train`, `val`, `test` keys with array of ids and their values. An example for creating such a file is provided in `jarvis_leaderboard/dataset/AI/PP/format_data.py` 
+
+3) Add a `.md` file in `docs` folder with path to respective submodule e.g., `docs/AI/PP/exfoliation_energy.md` 
 ## License
 This template is served under the NIST license.  
 Read the [LICENSE] file for more info.
