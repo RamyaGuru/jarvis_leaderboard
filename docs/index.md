@@ -13,18 +13,18 @@ Currently, there are  x number of benchmarks available.
 ## Getting Started
 
 To get started, first fork this repository by clicking on the Fork button [`Fork`](https://github.com/knc6/jarvis_leaderboard/fork). 
-On the new screen, give your repository a name and make sure to check `Include all branches`/ uncehck `Copy the master branch only`. 
-
-
-
 
 
 ## Adding model benchmarks to existing dataset
 To add a new benchmark, 
 
-1) Create a folder in the `jarvis_leaderboard/benchmarks` folder under respective submodule e.g. `xyz_model`. 
+1) Populate the dataset for a particular task+method+dataset using script such as `python jarvis_leaderboard/populate_data.py`. 
 
-2) In the `xyz_model` folder, add comma-separated zip file(`.csv.zip`) file(s) corresponding to benchmark(s), 
+2) Develop your model(s) using this dataset,
+
+3) Create a folder in the `jarvis_leaderboard/benchmarks` folder under respective submodule e.g. `xyz_model`. 
+
+4) In the `xyz_model` folder, add comma-separated zip file(`.csv.zip`) file(s) corresponding to benchmark(s), 
 e.g. `PP-test-exfoliation_energy-dft_2d-AI-mae.csv.zip` for `exfoliation_energy` in `dft_3d` dataset for `test` split using an `AI` (artificial intelligence method) with 
 `mae` (mean absolute error) metric for `PP` (property prediction) task. Therefore, the filename should have these six components. 
 
@@ -33,12 +33,14 @@ have been joined with '-' sign. This format should be used for consistency in we
 The test data splits are pre-determined, if the exact test IDs are not used, then the code might result in errors. 
 
 
-3) Add at least two columns: `id` and `prediction` in the csv file using your model. The `jarvis_leaderboard/rebuild.py` script will parse the data in the csv.zip file, and
+5) Add at least two columns: `id` and `prediction` in the csv file using your model. The `jarvis_leaderboard/rebuild.py` script will parse the data in the csv.zip file, and
 will calculate and analyze several metrics. The `id `should be identifier in the test split set and `prediction` is your model prediction.
 
 We recommend to name this folder as your model name, e.g. `alignn_models`, `cfid_models`, `cgcnn_models` etc. 
 
-3) Make a pull-request to the original repo.
+6) Add metadata info in the `metadata.json` file, an example is given in the `jarvis_leaderboard/benchmarks/alignn_models/metadata.json`. Also, add a `run.py` and `run.sh` scripts to reproduce the model predictions.
+
+7) Make a pull-request to the original repo.
 
 ## Adding model benchmarks to new dataset
 To add a new dataset

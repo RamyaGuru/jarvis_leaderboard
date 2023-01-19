@@ -1,4 +1,4 @@
-# Model for exfoliation energy
+# Model for exfoliation_energy
 
 <h2>Model benchmarks</h2>
 
@@ -14,5 +14,5 @@
     <th>Notes</th>
   </tr>
  </thead>
-<!--table_content-->
+<!--table_content--><tr><td><a href="https://github.com/txie-93/cgcnn" target="_blank">cgcnn_model</a></td><td>48.676</td><td>CGCNN</td><td>812</td><td>01-14-2023</td><td></td></tr><!--table_content--><tr><td><a href="https://github.com/usnistgov/alignn" target="_blank">alignn_model</a></td><td>52.703</td><td>JARVIS</td><td>812</td><td>01-14-2023</td><td></td></tr><!--table_content-->
 </table>

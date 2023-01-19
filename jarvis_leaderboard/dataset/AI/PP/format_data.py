@@ -7,8 +7,6 @@ from collections import defaultdict
 # The ids_train_val_test.json files are
 # obtained from Figshare:
 # https://figshare.com/projects/ALIGNN_models/126478
-
-
 def preapre_json_file(
     id_tag="jid",
     dataset="dft_3d",
@@ -16,7 +14,7 @@ def preapre_json_file(
     train_val_test="ids_train_val_test.json",
 ):
     """Prepare json file given id,dataset and prop info."""
-    print('Usind ids_train_val_test.json',train_val_test)
+    print("Usind ids_train_val_test.json", train_val_test)
     d = data(dataset)
     df = pd.DataFrame(d)
 
@@ -34,27 +32,30 @@ def preapre_json_file(
     train_data = defaultdict()
     for i in train_ids:
         val = get_val(jv_id=i)
-        if val=='na':
-           print(i,val)
-           import sys
-           sys.exit()
+        if val == "na":
+            print(i, val)
+            import sys
+
+            sys.exit()
         train_data[i] = val
 
     val_data = defaultdict()
     for i in val_ids:
         val = get_val(jv_id=i)
-        if val=='na':
-           print(i,val)
-           import sys
-           sys.exit()
+        if val == "na":
+            print(i, val)
+            import sys
+
+            sys.exit()
         val_data[i] = val
     test_data = defaultdict()
     for i in test_ids:
         val = get_val(jv_id=i)
-        if val=='na':
-           print(i,val)
-           import sys
-           sys.exit()
+        if val == "na":
+            print(i, val)
+            import sys
+
+            sys.exit()
         test_data[i] = val
 
     mem = {}
@@ -75,4 +76,4 @@ def preapre_json_file(
 
 
 if __name__ == "__main__":
-    preapre_json_file(prop='formation_energy_peratom')
+    preapre_json_file(prop="formation_energy_peratom")

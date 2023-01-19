@@ -1,4 +1,4 @@
-# Model for formation energy per atom
+# Model for formation_energy_peratom
 
 <h2>Model benchmarks</h2>
 
@@ -14,5 +14,5 @@
     <th>Notes</th>
   </tr>
  </thead>
-<!--table_content-->
+<!--table_content--><tr><td><a href="https://github.com/txie-93/cgcnn" target="_blank">cgcnn_model</a></td><td>0.063</td><td>CGCNN</td><td>55713</td><td>01-14-2023</td><td></td></tr><!--table_content--><tr><td><a href="https://github.com/usnistgov/alignn" target="_blank">alignn_model</a></td><td>0.033</td><td>JARVIS</td><td>55713</td><td>01-14-2023</td><td></td></tr><!--table_content-->
 </table>

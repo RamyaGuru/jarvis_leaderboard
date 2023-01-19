@@ -69,6 +69,7 @@ def get_metric_value(
 
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
+    print(i)
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     submod = temp[0]
