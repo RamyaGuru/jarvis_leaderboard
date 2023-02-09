@@ -1,6 +1,6 @@
 import os
 from jarvis.db.jsonutils import loadjson
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_error, accuracy_score
 import pandas as pd
 import glob
 import zipfile
@@ -22,7 +22,7 @@ def get_metric_value(
     metric="",
 ):
     results = {}
-    csv_data = pd.read_csv(csv_path)
+    csv_data = pd.read_csv(csv_path, sep=",")
     meta_path = csv_path.split("/")
     meta_path[-1] = "metadata.json"
     meta_path = "/".join(meta_path)
@@ -46,11 +46,14 @@ def get_metric_value(
 
     # json_data = loadjson(os.path.join(root_dir, fname))
     actual_data_json = json_data[data_split]
-    data_size = (
-        len(json_data["train"])
-        + len(json_data["val"])
-        + len(json_data["test"])
-    )
+    if "val" in json_data:  # sometimes just train-test
+        data_size = (
+            len(json_data["train"])
+            + len(json_data["val"])
+            + len(json_data["test"])
+        )
+    else:
+        data_size = len(json_data["train"]) + len(json_data["test"])
     # print ('actual_data_json',actual_data_json)
     results["dataset_size"] = data_size
     ids = []
@@ -60,15 +63,26 @@ def get_metric_value(
         targets.append(j)
     mem = {"id": ids, "actual": targets}
     actual_df = pd.DataFrame(mem)
+    # print ('actual_df',actual_df)
+    # print('csv_data',csv_data)
+    # actual_df.to_csv('actual_df.csv')
+    # csv_data.to_csv('csv_data.csv')
     df = pd.merge(csv_data, actual_df, on="id")
     results["res"] = "na"
     if metric == "mae":
         res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
         results["res"] = res
+    if metric == "acc":
+        print("ACC")
+        print(df, len(df))
+        res = round(accuracy_score(df["actual"], df["prediction"]), 3)
+        print("res", res)
+        results["res"] = res
     return results
 
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
+    # if 'Text' in i:
     print(i)
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
