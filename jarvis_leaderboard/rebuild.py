@@ -7,8 +7,8 @@ import zipfile
 import json
 
 print("Running modify.py script")
-
 root_dir = os.path.dirname(os.path.abspath(__file__))
+
 clean = True
 
 
