@@ -223,7 +223,7 @@ homepage = [
     # "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
     "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
     "TextClass-test-categories-arXiv-AI-acc",
-    "SinglePropertyPrediction-test-bulk_modulus-dft_3d-DFT-mae",
+    "SinglePropertyPrediction-test-bulk_modulus-dft_3d-ES-mae",
 ]
 #print("dat", dat)
 print("errors", errors)
