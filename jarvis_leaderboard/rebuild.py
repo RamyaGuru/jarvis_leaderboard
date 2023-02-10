@@ -5,11 +5,13 @@ import pandas as pd
 import glob
 import zipfile
 import json
+from collections import defaultdict
 
 print("Running modify.py script")
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
 clean = True
+errors = []
 
 
 def get_metric_value(
@@ -22,6 +24,13 @@ def get_metric_value(
     metric="",
 ):
     results = {}
+    results["method"] = method
+    results["submod"] = submod
+    results["dataset"] = dataset
+    results["prop"] = prop
+    results["data_split"] = data_split
+    results["csv_path"] = csv_path
+    results["metric"] = metric
     csv_data = pd.read_csv(csv_path, sep=",")
     meta_path = csv_path.split("/")
     meta_path[-1] = "metadata.json"
@@ -32,9 +41,9 @@ def get_metric_value(
     results["date_submitted"] = meta_data["date_submitted"]
     results["project_url"] = meta_data["project_url"]
 
-    print("meta_path", meta_data)
+    #print("meta_path", meta_data)
     # meta_data=loadjson()
-    print("csv_data", csv_path)
+    #print("csv_data", csv_path)
     # dataset with actual values
     temp = dataset + "_" + prop + ".json"
     temp2 = temp + ".zip"
@@ -67,16 +76,20 @@ def get_metric_value(
     # print('csv_data',csv_data)
     # actual_df.to_csv('actual_df.csv')
     # csv_data.to_csv('csv_data.csv')
+    if len(csv_data) != len(actual_df):
+        print("Error", csv_path, len(csv_data), len(actual_df))
+        errors.append(csv_path)
+
     df = pd.merge(csv_data, actual_df, on="id")
     results["res"] = "na"
     if metric == "mae":
         res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
         results["res"] = res
     if metric == "acc":
-        print("ACC")
-        print(df, len(df))
+        #print("ACC")
+        #print(df, len(df))
         res = round(accuracy_score(df["actual"], df["prediction"]), 3)
-        print("res", res)
+        #print("res", res)
         results["res"] = res
     return results
 
@@ -132,17 +145,17 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     md_filename = "../docs/" + method + "/" + submod + "/" + prop + ".md"
     md_path = os.path.join(root_dir, md_filename)
     notes = ""
-    print(
-        fname,
-        data_split,
-        prop,
-        dataset,
-        method,
-        metric,
-        team,
-        md_filename,
-        md_path,
-    )
+    #print(
+    #    fname,
+    #    data_split,
+    #    prop,
+    #    dataset,
+    #    method,
+    #    metric,
+    #    team,
+    #    md_filename,
+    #    md_path,
+    #)
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
 
@@ -205,5 +218,119 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
 
     with open(md_path, "w") as file:
         file.write("\n".join(content))
+homepage = [
+    "SinglePropertyPrediction-test-formation_energy_peratom-dft_3d-AI-mae",
+    # "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
+    "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
+    "TextClass-test-categories-arXiv-AI-acc",
+    "SinglePropertyPrediction-test-bulk_modulus-dft_3d-DFT-mae",
+]
+#print("dat", dat)
+print("errors", errors)
+selected = defaultdict()
+for i in dat:
+    temp = float(i["result"]["res"])
 
-print("dat", dat)
+    name = (
+        i["result"]["submod"]
+        + "-"
+        + i["result"]["data_split"]
+        + "-"
+        + i["result"]["prop"]
+        + "-"
+        + i["result"]["dataset"]
+        + "-"
+        + i["result"]["method"]
+        + "-"
+        + i["result"]["metric"]
+    )
+    i["result"]["team"] = i["team"]
+    if name in homepage:
+        # print (i['result'])
+        if name not in selected:
+            selected[name] = i["result"]
+        elif temp > selected[name]["res"] and i["result"]["metric"] == "acc":
+            selected[name] = i["result"]
+        elif temp < selected[name]["res"] and i["result"]["metric"] == "mae":
+            selected[name] = i["result"]
+
+#print("selected", selected)
+temp = (
+    '<!--table_content--><table style="width:100%" id="j_table">'
+    + "<thead><tr><th>Method</th><th>Task</th><th>Property</th><th>Model name</th>"
+    + "<th>Metric</th><th>Score</th><th>Team name</th>"
+    + "<th>Size</th></tr></thead>"
+)
+for i, j in selected.items():
+    temp = (
+        temp
+        + "<tr>"
+        + "<td>"
+        +'<a href="./' + j["method"] + '" target="_blank">' + j["method"] + "</a>"
+        #+ j["method"]
+        + "</td>"
+        + "<td>"
+        +'<a href="./' + j["method"]+'/'+j["submod"] + '" target="_blank">' + j["submod"] + "</a>"
+        #+ j["submod"]
+        + "</td>"
+        + "<td>"
+        +'<a href="./' + j["method"]+'/'+j["submod"] +'/'+j["prop"] +'" target="_blank">' + j["prop"] + "</a>"
+        #+ j["prop"]
+        + "</td>"
+        + "<td>"
+        + j["team"]
+        + "</td>"
+        + "<td>"
+        + str(j["metric"].upper())
+        + "</td>"
+        + "<td>"
+        + str(j["res"])
+        + "</td>"
+        + "<td>"
+        + str(j["team_name"])
+        + "</td>"
+        + "<td>"
+        + str(j["dataset_size"])
+        + "</td>"
+        # + "<td>"
+        # + str(j["date_submitted"])
+        # + "</td>"
+        + "</tr>"
+    )
+
+
+md_path = "docs/index.md"
+
+
+with open(md_path, "r") as file:
+    filedata = file.read().splitlines()
+content = []
+for j in filedata:
+    if "<!--table_content-->" in j:
+        content.append("<!--table_content-->")
+    else:
+        content.append(j)
+with open(md_path, "w") as file:
+    file.write("\n".join(content))
+
+
+with open(md_path, "r") as file:
+    filedata = file.read().splitlines()
+content = []
+for j in filedata:
+    if "<!--table_content-->" in j:
+        temp = temp + j + "</table>"
+        content.append(temp)
+    else:
+        content.append(j)
+# filedata = filedata.replace('<!--table_content-->', temp)
+
+with open(md_path, "w") as file:
+    file.write("\n".join(content))
+    # + "<td>"
+    # + method
+    # + "</td>"
+    # + "<td>"
+    # + str(res['model_name'])
+    # + "</td>"
+#print(temp)
