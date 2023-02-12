@@ -6,6 +6,7 @@ import glob
 import zipfile
 import json
 from collections import defaultdict
+import collections
 
 print("Running modify.py script")
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,9 +42,9 @@ def get_metric_value(
     results["date_submitted"] = meta_data["date_submitted"]
     results["project_url"] = meta_data["project_url"]
 
-    #print("meta_path", meta_data)
+    # print("meta_path", meta_data)
     # meta_data=loadjson()
-    #print("csv_data", csv_path)
+    # print("csv_data", csv_path)
     # dataset with actual values
     temp = dataset + "_" + prop + ".json"
     temp2 = temp + ".zip"
@@ -81,26 +82,26 @@ def get_metric_value(
         errors.append(csv_path)
 
     df = pd.merge(csv_data, actual_df, on="id")
-    #print('csv',csv_path)
-    #print ('df',df)
-    #print('csv_data',csv_data)
-    #print('actual_df',actual_df)
+    # print('csv',csv_path)
+    # print ('df',df)
+    # print('csv_data',csv_data)
+    # print('actual_df',actual_df)
     results["res"] = "na"
     if metric == "mae":
         res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
         results["res"] = res
     if metric == "acc":
-        #print("ACC")
-        #print(df, len(df))
+        # print("ACC")
+        # print(df, len(df))
         res = round(accuracy_score(df["actual"], df["prediction"]), 3)
-        #print("res", res)
+        # print("res", res)
         results["res"] = res
     return results
 
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     # if 'Text' in i:
-    #print(i)
+    # print(i)
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     submod = temp[0]
@@ -149,7 +150,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     md_filename = "../docs/" + method + "/" + submod + "/" + prop + ".md"
     md_path = os.path.join(root_dir, md_filename)
     notes = ""
-    #print(
+    # print(
     #    fname,
     #    data_split,
     #    prop,
@@ -159,11 +160,11 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     #    team,
     #    md_filename,
     #    md_path,
-    #)
+    # )
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
-    print (i)
-    print ()
+    print(i)
+    print()
     res = get_metric_value(
         submod=submod,
         csv_path=i,
@@ -226,16 +227,48 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
 homepage = [
     "SinglePropertyPrediction-test-formation_energy_peratom-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
+    "MLFF-test-energy-alignn_ff_db-AI-mae",
     "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
     "TextClass-test-categories-arXiv-AI-acc",
     "SinglePropertyPrediction-test-bulk_modulus-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-bandgap-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
-    "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae"
+    "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae",
 ]
-#print("dat", dat)
-print("errors", errors,len(errors))
+# print("dat", dat)
+print("errors", errors, len(errors))
 selected = defaultdict()
+for name in homepage:
+    for i in dat:
+        name2 = (
+            i["result"]["submod"]
+            + "-"
+            + i["result"]["data_split"]
+            + "-"
+            + i["result"]["prop"]
+            + "-"
+            + i["result"]["dataset"]
+            + "-"
+            + i["result"]["method"]
+            + "-"
+            + i["result"]["metric"]
+        )
+        if name == name2:
+            temp = float(i["result"]["res"])
+            i["result"]["team"] = i["team"]
+            if name not in selected:
+                selected[name] = i["result"]
+            elif (
+                temp > selected[name]["res"] and i["result"]["metric"] == "acc"
+            ):
+                selected[name] = i["result"]
+            elif (
+                temp < selected[name]["res"] and i["result"]["metric"] == "mae"
+            ):
+                selected[name] = i["result"]
+
+
+"""
 for i in dat:
     temp = float(i["result"]["res"])
 
@@ -262,36 +295,55 @@ for i in dat:
         elif temp < selected[name]["res"] and i["result"]["metric"] == "mae":
             selected[name] = i["result"]
 
-#print("selected", selected)
+"""
+# print("selected", selected)
 temp = (
     '<!--table_content--><table style="width:100%" id="j_table">'
     + "<thead><tr>"
-    +"<th>Method</th>"
-    #+'<th><a href="./method' + '" target="_blank">' + 'Method' + "</a></th>"
-    +"<th>Task</th>"
-    +"<th>Property</th>"
-    +"<th>Model name</th>"
-    +"<th>Metric</th>"
-    +"<th>Score</th>"
-    +"<th>Team</th>"
-    +"<th>Size</th>"
-    +"</tr></thead>"
+    + "<th>Method</th>"
+    # +'<th><a href="./method' + '" target="_blank">' + 'Method' + "</a></th>"
+    + "<th>Task</th>"
+    + "<th>Property</th>"
+    + "<th>Model name</th>"
+    + "<th>Metric</th>"
+    + "<th>Score</th>"
+    + "<th>Team</th>"
+    + "<th>Size</th>"
+    + "</tr></thead>"
 )
 for i, j in selected.items():
     temp = (
         temp
         + "<tr>"
         + "<td>"
-        +'<a href="./' + j["method"] + '" target="_blank">' + j["method"] + "</a>"
-        #+ j["method"]
+        + '<a href="./'
+        + j["method"]
+        + '" target="_blank">'
+        + j["method"]
+        + "</a>"
+        # + j["method"]
         + "</td>"
         + "<td>"
-        +'<a href="./' + j["method"]+'/'+j["submod"] + '" target="_blank">' + j["submod"] + "</a>"
-        #+ j["submod"]
+        + '<a href="./'
+        + j["method"]
+        + "/"
+        + j["submod"]
+        + '" target="_blank">'
+        + j["submod"]
+        + "</a>"
+        # + j["submod"]
         + "</td>"
         + "<td>"
-        +'<a href="./' + j["method"]+'/'+j["submod"] +'/'+j["prop"] +'" target="_blank">' + j["prop"] + "</a>"
-        #+ j["prop"]
+        + '<a href="./'
+        + j["method"]
+        + "/"
+        + j["submod"]
+        + "/"
+        + j["prop"]
+        + '" target="_blank">'
+        + j["prop"]
+        + "</a>"
+        # + j["prop"]
         + "</td>"
         + "<td>"
         + j["team"]
@@ -324,6 +376,8 @@ content = []
 for j in filedata:
     if "<!--table_content-->" in j:
         content.append("<!--table_content-->")
+    elif "<!--number_of_benchmarks-->" in j:
+        content.append("<!--number_of_benchmarks-->")
     else:
         content.append(j)
 with open(md_path, "w") as file:
@@ -337,6 +391,13 @@ for j in filedata:
     if "<!--table_content-->" in j:
         temp = temp + j + "</table>"
         content.append(temp)
+    elif "<!--number_of_benchmarks-->" in j:
+        temp2 = (
+            "<!--number_of_benchmarks-->Number of benchmarks: "
+            + str(len(dat))
+            + "\n"
+        )
+        content.append(temp2)
     else:
         content.append(j)
 # filedata = filedata.replace('<!--table_content-->', temp)
@@ -349,4 +410,4 @@ with open(md_path, "w") as file:
     # + "<td>"
     # + str(res['model_name'])
     # + "</td>"
-#print(temp)
+# print(temp)
