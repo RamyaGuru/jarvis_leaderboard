@@ -13,5 +13,5 @@
     <th>Notes</th>
   </tr>
  </thead>
-<!--table_content--><tr><td><a href="https://github.com/usnistgov/alignn" target="_blank">vasp_optb88vdw</a></td><td>10.925</td><td>JARVIS</td><td>4</td><td>01-14-2023</td><td></td></tr><!--table_content-->
+<!--table_content--><tr><td><a href="https://github.com/usnistgov/alignn" target="_blank">vasp_optpbe</a></td><td>9.176</td><td>JARVIS</td><td>21</td><td>01-14-2023</td><td></td></tr><!--table_content--><tr><td><a href="https://github.com/usnistgov/alignn" target="_blank">vasp_optb88vdw</a></td><td>5.732</td><td>JARVIS</td><td>21</td><td>01-14-2023</td><td></td></tr><!--table_content-->
 </table>

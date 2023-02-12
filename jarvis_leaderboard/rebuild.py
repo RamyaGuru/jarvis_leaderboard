@@ -81,6 +81,10 @@ def get_metric_value(
         errors.append(csv_path)
 
     df = pd.merge(csv_data, actual_df, on="id")
+    #print('csv',csv_path)
+    #print ('df',df)
+    #print('csv_data',csv_data)
+    #print('actual_df',actual_df)
     results["res"] = "na"
     if metric == "mae":
         res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
@@ -96,7 +100,7 @@ def get_metric_value(
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     # if 'Text' in i:
-    print(i)
+    #print(i)
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     submod = temp[0]
@@ -158,7 +162,8 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     #)
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
-
+    print (i)
+    print ()
     res = get_metric_value(
         submod=submod,
         csv_path=i,
@@ -220,13 +225,16 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
         file.write("\n".join(content))
 homepage = [
     "SinglePropertyPrediction-test-formation_energy_peratom-dft_3d-AI-mae",
-    # "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
+    "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
     "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
     "TextClass-test-categories-arXiv-AI-acc",
     "SinglePropertyPrediction-test-bulk_modulus-dft_3d-ES-mae",
+    "SinglePropertyPrediction-test-bandgap-dft_3d-ES-mae",
+    "SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
+    "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae"
 ]
 #print("dat", dat)
-print("errors", errors)
+print("errors", errors,len(errors))
 selected = defaultdict()
 for i in dat:
     temp = float(i["result"]["res"])
@@ -257,9 +265,17 @@ for i in dat:
 #print("selected", selected)
 temp = (
     '<!--table_content--><table style="width:100%" id="j_table">'
-    + "<thead><tr><th>Method</th><th>Task</th><th>Property</th><th>Model name</th>"
-    + "<th>Metric</th><th>Score</th><th>Team name</th>"
-    + "<th>Size</th></tr></thead>"
+    + "<thead><tr>"
+    +"<th>Method</th>"
+    #+'<th><a href="./method' + '" target="_blank">' + 'Method' + "</a></th>"
+    +"<th>Task</th>"
+    +"<th>Property</th>"
+    +"<th>Model name</th>"
+    +"<th>Metric</th>"
+    +"<th>Score</th>"
+    +"<th>Team</th>"
+    +"<th>Size</th>"
+    +"</tr></thead>"
 )
 for i, j in selected.items():
     temp = (
