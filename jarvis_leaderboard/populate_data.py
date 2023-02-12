@@ -33,7 +33,7 @@ parser.add_argument(
 parser.add_argument("--method", default="AI", help="Select method AI etc...")
 
 parser.add_argument(
-    "--task", default="PP", help="Select task: propert-prediction (PP) etc...."
+    "--task", default="SinglePropertyPrediction", help="Select task: SinglePropertyPrediction etc...."
 )
 parser.add_argument(
     "--id_tag",

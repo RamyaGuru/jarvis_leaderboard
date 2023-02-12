@@ -14,5 +14,5 @@
     <th>Notes</th>
   </tr>
  </thead>
-<!--table_content--><tr><td><a href="https://github.com/usnistgov/alignn" target="_blank">logisticreg_model</a></td><td>0.86</td><td>JARVIS</td><td>100994</td><td>01-14-2023</td><td></td></tr><!--table_content-->
+<!--table_content--><tr><td><a href="https://arxiv.org/abs/2209.08203" target="_blank">logisticreg_model</a></td><td>0.86</td><td>JARVIS</td><td>100994</td><td>01-14-2023</td><td></td></tr><!--table_content-->
 </table>

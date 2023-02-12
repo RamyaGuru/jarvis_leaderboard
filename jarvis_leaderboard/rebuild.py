@@ -227,6 +227,8 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
 homepage = [
     "SinglePropertyPrediction-test-formation_energy_peratom-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
+    "SinglePropertyPrediction-test-optb88vdw_total_energy-dft_3d-AI-mae",
+    "SinglePropertyPrediction-test-bulk_modulus_kv-dft_3d-AI-mae",
     "MLFF-test-energy-alignn_ff_db-AI-mae",
     "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
     "TextClass-test-categories-arXiv-AI-acc",
@@ -234,6 +236,7 @@ homepage = [
     "SinglePropertyPrediction-test-bandgap-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae",
+    "SinglePropertyPrediction-test-slme-dft_3d-ES-mae",
 ]
 # print("dat", dat)
 print("errors", errors, len(errors))
@@ -393,7 +396,7 @@ for j in filedata:
         content.append(temp)
     elif "<!--number_of_benchmarks-->" in j:
         temp2 = (
-            "<!--number_of_benchmarks-->Number of benchmarks: "
+            "<!--number_of_benchmarks--> - Number of benchmarks: "
             + str(len(dat))
             + "\n"
         )

@@ -1,4 +1,4 @@
-# Model for Tc_supercon
+# Model for SLME
 
 <h2>Model benchmarks</h2>
 
@@ -13,5 +13,5 @@
     <th>Notes</th>
   </tr>
  </thead>
-<!--table_content--><tr><td><a href="https://www.nature.com/articles/s41524-022-00933-1" target="_blank">qe_pbesol_gbrv</a></td><td>3.378</td><td>JARVIS</td><td>14</td><td>01-14-2023</td><td></td></tr><!--table_content-->
+<!--table_content--><tr><td><a href="https://pubs.acs.org/doi/abs/10.1021/acs.chemmater.9b02166" target="_blank">vasp_tbmbj</a></td><td>5.093</td><td>JARVIS</td><td>5</td><td>01-14-2023</td><td></td></tr><!--table_content-->
 </table>

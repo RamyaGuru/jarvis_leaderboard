@@ -6,6 +6,7 @@ keys=['dft_3d_bandgap.json','mbj_bandgap']
 keys=['dft_3d_epsx.json','epsx']
 keys=['dft_3d_epsx.json','dfpt_piezo_max_dielectric']
 keys=['dft_3d_Tc_supercon.json','Tc_supercon']
+keys=['dft_3d_max_piezoelec.json','dfpt_piezo_max_eij']
 d=loadjson(keys[0])
 dft=data('dft_3d')
 #>>> d['test']
@@ -27,5 +28,3 @@ f.close()
 print (len(d['test']))
 #for i in dft:
 # if i['jid'] in list(d['test'].keys()):
-#     print (i['jid'],i['bulk_modulus_kv'])
-
