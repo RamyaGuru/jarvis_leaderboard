@@ -7,6 +7,8 @@ import zipfile
 import json
 from collections import defaultdict
 import collections
+import numpy as np
+
 
 print("Running modify.py script")
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -96,6 +98,21 @@ def get_metric_value(
         res = round(accuracy_score(df["actual"], df["prediction"]), 3)
         # print("res", res)
         results["res"] = res
+    if metric == "multimae":
+        print("csv multimae", csv_path)
+        maes = []
+        for k, v in df.iterrows():
+            real = np.array(v["target"].split(";"), dtype="float")
+            pred = np.array(v["prediction"].split(";"), dtype="float")
+            m = mean_absolute_error(real, pred)
+            maes.append(m)
+            # print('mm',m)
+        results["res"] = round(np.array(maes).sum(), 3)
+        # print ('df',df)
+        # print('csv_data',csv_data)
+        # print('actual_df',actual_df)
+        # print('res',results['res'])
+
     return results
 
 
@@ -237,6 +254,7 @@ homepage = [
     "SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-slme-dft_3d-ES-mae",
+    "EigenSolver-test-electron_bands-dft_3d-QC-multimae",
 ]
 # print("dat", dat)
 print("errors", errors, len(errors))
