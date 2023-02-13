@@ -8,8 +8,8 @@ from collections import defaultdict
 # obtained from Figshare:
 # https://figshare.com/projects/ALIGNN_models/126478
 def preapre_json_file(
-    id_tag="jid",
-    dataset="dft_3d",
+    id_tag="id",
+    dataset="hmof",
     prop="exfoliation_energy",
     train_val_test="ids_train_val_test.json",
 ):
@@ -30,33 +30,50 @@ def preapre_json_file(
     test_ids = split_file["id_test"]
 
     train_data = defaultdict()
-    for i in train_ids:
-        val = get_val(jv_id=i)
-        if val == "na":
-            print(i, val)
-            import sys
+    for i,j in df[df[id_tag].isin(train_ids)][[id_tag,prop]].iterrows():
+         if dataset=='hmof':
+           train_data['hMOF-'+str(i)]=j[prop]
+         else:
+           train_data[i]=j[prop]
+    #for i in train_ids:
+    #    val = get_val(jv_id=i)
+    #    if val == "na":
+    #        print(i, val)
+    #        import sys
 
-            sys.exit()
-        train_data[i] = val
+    #        sys.exit()
+    #    train_data[i] = val
 
     val_data = defaultdict()
-    for i in val_ids:
-        val = get_val(jv_id=i)
-        if val == "na":
-            print(i, val)
-            import sys
+    for i,j in df[df[id_tag].isin(val_ids)][[id_tag,prop]].iterrows():
+         #val_data[i]=j[prop]
+         if dataset=='hmof':
+           val_data['hMOF-'+str(i)]=j[prop]
+         else:
+           val_data[i]=j[prop]
+    #for i in val_ids:
+    #    val = get_val(jv_id=i)
+    #    if val == "na":
+    #        print(i, val)
+    #        import sys
 
-            sys.exit()
-        val_data[i] = val
+    #        sys.exit()
+    #    val_data[i] = val
     test_data = defaultdict()
-    for i in test_ids:
-        val = get_val(jv_id=i)
-        if val == "na":
-            print(i, val)
-            import sys
+    for i,j in df[df[id_tag].isin(test_ids)][[id_tag,prop]].iterrows():
+         #test_data[i]=j[prop]
+         if dataset=='hmof':
+           test_data['hMOF-'+str(i)]=j[prop]
+         else:
+           test_data[i]=j[prop]
+    #for i in test_ids:
+    #    val = get_val(jv_id=i)
+    #    if val == "na":
+    #        print(i, val)
+    #        import sys
 
-            sys.exit()
-        test_data[i] = val
+    #        sys.exit()
+    #    test_data[i] = val
 
     mem = {}
     mem["train"] = dict(train_data)

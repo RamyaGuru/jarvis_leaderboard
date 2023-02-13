@@ -5,7 +5,6 @@ from format_data import preapre_json_file
 import pandas as pd
 from io import StringIO
 
-jl_path = ""
 pp = list(
     set(
         [
@@ -14,7 +13,6 @@ pp = list(
             "bulk_modulus_kv",
             "dfpt_piezo_max_dielectric",
             "dfpt_piezo_max_dij",
-            "dfpt_piezo_max_eij",
             "ehull",
             "encut",
             "epsx",
@@ -43,44 +41,53 @@ pp = list(
         ]
     )
 )
+pp = list(
+    set(
+        [
+            "lcd",
+            "pld",
+            "void_fraction",
+            "surface_area_m2g",
+            "surface_area_m2cm3",
+            "max_co2_adsp",
+            "min_co2_adsp",
+        ]
+    )
+)
 # pp=['slme','spillage','shear_modulus_gv']
 x = []
-for i in glob.glob(
-    "/mnt/c/Users/knc6/OneDrive - NIST/KamalLaptop/JARVIS-ALIGNN/Models/17005681/*.zip"
-):
+for i in glob.glob("JARVIS-ALIGNN/Models/17005987/*.zip"):
     if "supercon" not in i:
         p = (
             i.split("/")[-1]
             .split(".zip")[0]
-            .split("jv_")[1]
-            .split("_alignn")[0]
+            .split("hmof_")[1]
+            .split("_alignnn")[0]
         )
         if p in pp:
             model_zipfile = (
-                "/mnt/c/Users/knc6/OneDrive - NIST/KamalLaptop/JARVIS-ALIGNN/Models/17005681/jv_"
-                + p
-                + "_alignn.zip"
+                "JARVIS-ALIGNN/Models/17005987/hmof_" + p + "_alignnn.zip"
             )
             model_zip = zipfile.ZipFile(model_zipfile)
             print("model_zipfile", model_zipfile, model_zip.namelist())
-            temp = "jv_" + p + "_alignn/ids_train_val_test.json"
+            temp = "hmof_" + p + "_alignnn/ids_train_val_test.json"
             train_val_test = json.loads(model_zip.read(temp))
 
-            #dumpjson(filename='ids_train_val_test.json',data=train_val_test)
-            #preapre_json_file(prop=p)
-            #cmd='rm ids_train_val_test.json'
-            #os.system(cmd)
+            dumpjson(filename="ids_train_val_test.json", data=train_val_test)
+            preapre_json_file(prop=p)
+            cmd = "rm ids_train_val_test.json"
+            os.system(cmd)
 
-            fname=p.replace('n-','n_')+'.md'
-            f=open(fname,'w')
-            line='# Model for '+p+'\n\n'
+            fname = p + ".md"
+            f = open(fname, "w")
+            line = "# Model for " + p + "\n\n"
             f.write(line)
-            line='<h2>Model benchmarks</h2>\n\n<table style="width:100%" id="j_table">\n <thead>\n  <tr>\n    <th>Model name</th>\n   <!-- <th>Method</th>-->\n    <th>MAE</th>\n    <th>Team name</th>\n    <th>Dataset size</th>\n    <th>Date submitted</th>\n    <th>Notes</th>\n  </tr>\n </thead>\n<!--table_content-->\n</table>\n'
+            line = '<h2>Model benchmarks</h2>\n\n<table style="width:100%" id="j_table">\n <thead>\n  <tr>\n    <th>Model name</th>\n   <!-- <th>Method</th>-->\n    <th>MAE</th>\n    <th>Team name</th>\n    <th>Dataset size</th>\n    <th>Date submitted</th>\n    <th>Notes</th>\n  </tr>\n </thead>\n<!--table_content-->\n</table>\n'
             f.write(line)
             f.close()
-            temp = "jv_" + p + "_alignn/prediction_results_test_set.csv"
-            p = p.replace('n-','n_') #For n-seebeck etc
-            fname = "SinglePropertyPrediction-test-" + p + "-dft_3d-AI-mae.csv"
+            temp = "hmof_" + p + "_alignnn/prediction_results_test_set.csv"
+            p = p.replace("n-", "n_").replace("p-", "p_")  # For n-seebeck etc
+            fname = "SinglePropertyPrediction-test-" + p + "-hmof-AI-mae.csv"
             f = open(fname, "wb")
             f.write(model_zip.read(temp))
             f.close()
@@ -90,7 +97,8 @@ for i in glob.glob(
             x.append(p)
 print(x)
 
-import os,glob
-for i in glob.glob('*csv'):
-  cmd='zip '+i+'.zip '+i
-  os.system(cmd)
+import os, glob
+
+for i in glob.glob("*csv"):
+    cmd = "zip " + i + ".zip " + i
+    os.system(cmd)

@@ -1,5 +1,3 @@
-
-
 [LICENSE]: https://github.com/usnistgov/jarvis/blob/master/LICENSE.rst
 
 # JARVIS Leaderboard [WIP]
@@ -8,7 +6,9 @@ This project provides benchmark-performances of various methods for materials sc
 In addition to prediction results, we attempt to capture the underlyig software and hardware frameworks in training models to enhance reproducibility. This project is a part of the [NIST-JARVIS](https://jarvis.nist.gov) infrastructure.
 
 
-<!--number_of_benchmarks--> - Number of benchmarks: 55
+<!--number_of_benchmarks--> - Number of benchmarks: 62
+
+
 
 
 
@@ -52,8 +52,14 @@ In addition to prediction results, we attempt to capture the underlyig software 
 
 # Adding benchmarks and datasets
 
-To get started, first fork this repository by clicking on the Fork button [`Fork`](https://github.com/knc6/jarvis_leaderboard/fork). 
+To get started, first fork this repository by clicking on the [`Fork`](https://github.com/knc6/jarvis_leaderboard/fork) button. 
 
+Then, clone your forked repository and install the project: 
+```
+git clone https://github.com/YOUR_USERNAME/jarvis_leaderboard
+cd jarvis_leaderboard
+python setup.py develop
+```
 
 ## A) Adding model benchmarks to existing dataset
 

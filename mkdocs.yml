@@ -195,7 +195,8 @@ theme:
     # | - https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/#primary-color             |
     # |                                                                                                    |
     # +----------------------------------------------------------------------------------------------------+
-    primary: 'indigo'
+    primary: 'blue'
+    #primary: 'indigo'
     
     # +----------------------------------------------------------------------------------------------------+
     # |                                                                                                    |
@@ -205,7 +206,10 @@ theme:
     # | - https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/#accent-color              |
     # |                                                                                                    |
     # +----------------------------------------------------------------------------------------------------+
-    accent: 'indigo'
+    #accent: 'indigo'
+    primary: 'deep orange'
+    #primary: 'light blue'
+    accent: 'light blue'
     
   # +------------------------------------------------------------------------------------------------------+
   # |                                                                                                      |
