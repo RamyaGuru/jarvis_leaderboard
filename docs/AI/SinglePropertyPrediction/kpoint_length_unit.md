@@ -14,5 +14,5 @@
     <th>Notes</th>
   </tr>
  </thead>
-<!--table_content--><tr><td><a href="https://www.nature.com/articles/s41524-021-00650-1" target="_blank">alignn_model</a></td><td>9.513</td><td>JARVIS</td><td>55392</td><td>01-14-2023</td><td></td></tr><!--table_content-->
+<!--table_content--><tr><td><a href="https://www.nature.com/articles/s41524-021-00650-1" target="_blank">alignn_model</a></td><td>9.515</td><td>JARVIS</td><td>55392</td><td>01-14-2023</td><td></td></tr><!--table_content-->
 </table>

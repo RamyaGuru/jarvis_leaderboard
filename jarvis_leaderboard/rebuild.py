@@ -99,7 +99,7 @@ def get_metric_value(
         # print("res", res)
         results["res"] = res
     if metric == "multimae":
-        print("csv multimae", csv_path)
+        #print("csv multimae", csv_path)
         maes = []
         for k, v in df.iterrows():
             real = np.array(v["target"].split(";"), dtype="float")
@@ -118,7 +118,7 @@ def get_metric_value(
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     # if 'Text' in i:
-    # print(i)
+    print(i)
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     submod = temp[0]
@@ -180,8 +180,8 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     # )
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
-    print(i)
-    print()
+    #print(i)
+    #print()
     res = get_metric_value(
         submod=submod,
         csv_path=i,
