@@ -2,57 +2,11 @@
 
 # JARVIS Leaderboard [WIP]
 
-This project provides benchmark-performances of various methods for materials science applications using the datasets available in [JARVIS-Tools databases](https://jarvis-tools.readthedocs.io/en/master/databases.html). Some of methods are: Artificial Intelligence (AI), Electronic Structure (ES) and Qunatum Computation (QC).
+This project provides benchmark-performances of various methods for materials science applications using the datasets available in [JARVIS-Tools databases](https://jarvis-tools.readthedocs.io/en/master/databases.html). Some of the methods are: Artificial Intelligence (AI), Electronic Structure (ES) and Qunatum Computation (QC).
 In addition to prediction results, we attempt to capture the underlyig software and hardware frameworks in training models to enhance reproducibility. This project is a part of the [NIST-JARVIS](https://jarvis.nist.gov) infrastructure.
 
 
 <!--number_of_benchmarks--> - Number of benchmarks: 76
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

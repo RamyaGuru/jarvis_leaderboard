@@ -96,32 +96,36 @@ def get_metric_value(
     # print('csv_data',csv_data)
     # actual_df.to_csv('actual_df.csv')
     # csv_data.to_csv('csv_data.csv')
-    csv_data['id']=csv_data['id'].astype(str)
-    actual_df['id']=actual_df['id'].astype(str)
+    csv_data["id"] = csv_data["id"].astype(str)
+    actual_df["id"] = actual_df["id"].astype(str)
     if len(csv_data) != len(actual_df):
         print("Error", csv_path, len(csv_data), len(actual_df))
         errors.append(csv_path)
 
     df = pd.merge(csv_data, actual_df, on="id")
-    #print('csv',csv_path)
-    #print ('df',df)
-    #print('csv_data',csv_data)
-    #print('actual_df',actual_df)
+    # print('csv',csv_path)
+    # print ('df',df)
+    # print('csv_data',csv_data)
+    # print('actual_df',actual_df)
     results["res"] = "na"
     if metric == "mae":
         res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
         results["res"] = res
-        if 'qm9_std_jctc' in csv_path:
-         #print('scaling[dataset][prop],',scaling[dataset][prop])
-         res = round(scaling[dataset][prop]*mean_absolute_error(df["actual"], df["prediction"]), 3)
-         #res = round(mean_absolute_error(df["actual"]*scaling[dataset][prop], df["prediction"]*scaling[dataset]), 3)
-         results["res"] = res
-         #print(csv_path)
-         #print('mae1',mean_absolute_error(csv_data['target'],csv_data['prediction']))
-         #print('res',res)
-         #print(csv_data)
-         #print(actual_df)
-         #print()
+        if "qm9_std_jctc" in csv_path:
+            # print('scaling[dataset][prop],',scaling[dataset][prop])
+            res = round(
+                scaling[dataset][prop]
+                * mean_absolute_error(df["actual"], df["prediction"]),
+                3,
+            )
+            # res = round(mean_absolute_error(df["actual"]*scaling[dataset][prop], df["prediction"]*scaling[dataset]), 3)
+            results["res"] = res
+            # print(csv_path)
+            # print('mae1',mean_absolute_error(csv_data['target'],csv_data['prediction']))
+            # print('res',res)
+            # print(csv_data)
+            # print(actual_df)
+            # print()
     if metric == "acc":
         # print("ACC")
         # print(df, len(df))
@@ -274,6 +278,164 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
 
     with open(md_path, "w") as file:
         file.write("\n".join(content))
+# print("dat", dat)
+
+def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []):
+    if not homepage:
+     homepage = []
+     for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
+        if key in i:
+            p = i.split('/')[-1].split('.csv.zip')[0]
+            homepage.append(p)
+    #print ('index pages',homepage)
+    # print("dat", dat)
+    #print("errors", errors, len(errors))
+    selected = defaultdict()
+    for name in homepage:
+        for i in dat:
+            name2 = (
+                i["result"]["submod"]
+                + "-"
+                + i["result"]["data_split"]
+                + "-"
+                + i["result"]["prop"]
+                + "-"
+                + i["result"]["dataset"]
+                + "-"
+                + i["result"]["method"]
+                + "-"
+                + i["result"]["metric"]
+            )
+            if name == name2:
+                temp = float(i["result"]["res"])
+                i["result"]["team"] = i["team"]
+                if name not in selected:
+                    selected[name] = i["result"]
+                elif (
+                    temp > selected[name]["res"]
+                    and i["result"]["metric"] == "acc"
+                ):
+                    selected[name] = i["result"]
+                elif (
+                    temp < selected[name]["res"]
+                    and i["result"]["metric"] == "mae"
+                ):
+                    selected[name] = i["result"]
+    temp = (
+        '<!--table_content--><table style="width:100%" id="j_table">'
+        + "<thead><tr>"
+        + "<th>Method</th>"
+        # +'<th><a href="./method' + '" target="_blank">' + 'Method' + "</a></th>"
+        + "<th>Task</th>"
+        + "<th>Property</th>"
+        + "<th>Model name</th>"
+        + "<th>Metric</th>"
+        + "<th>Score</th>"
+        + "<th>Team</th>"
+        + "<th>Dataset</th>"
+        + "<th>Size</th>"
+        + "</tr></thead>"
+    )
+    for i, j in selected.items():
+        temp = (
+            temp
+            + "<tr>"
+            + "<td>"
+            + '<a href="./'
+            + j["method"]
+            + '" target="_blank">'
+            + j["method"]
+            + "</a>"
+            # + j["method"]
+            + "</td>"
+            + "<td>"
+            + '<a href="./'
+            + j["method"]
+            + "/"
+            + j["submod"]
+            + '" target="_blank">'
+            + j["submod"]
+            + "</a>"
+            # + j["submod"]
+            + "</td>"
+            + "<td>"
+            + '<a href="./'
+            + j["method"]
+            + "/"
+            + j["submod"]
+            + "/"
+            + j["prop"]
+            + '" target="_blank">'
+            + j["prop"]
+            + "</a>"
+            # + j["prop"]
+            + "</td>"
+            + "<td>"
+            + j["team"]
+            + "</td>"
+            + "<td>"
+            + str(j["metric"].upper())
+            + "</td>"
+            + "<td>"
+            + str(j["res"])
+            + "</td>"
+            + "<td>"
+            + str(j["team_name"])
+            + "</td>"
+            + "<td>"
+            + str(j["dataset"])
+            + "</td>"
+            + "<td>"
+            + str(j["dataset_size"])
+            + "</td>"
+            # + "<td>"
+            # + str(j["date_submitted"])
+            # + "</td>"
+            + "</tr>"
+        )
+
+    # md_path = "docs/index.md"
+
+    with open(md_path, "r") as file:
+        filedata = file.read().splitlines()
+    content = []
+    for j in filedata:
+        if "<!--table_content-->" in j:
+            content.append("<!--table_content-->")
+        elif "<!--number_of_benchmarks-->" in j:
+            content.append("<!--number_of_benchmarks-->")
+        else:
+            content.append(j)
+    with open(md_path, "w") as file:
+        file.write("\n".join(content))
+
+    with open(md_path, "r") as file:
+        filedata = file.read().splitlines()
+    content = []
+    n_benchs=len(homepage)
+    if md_path=='docs/index.md':
+       n_benchs=len(dat)
+
+    for j in filedata:
+        if "<!--table_content-->" in j:
+            temp = temp + j + "</table>"
+            content.append(temp)
+        elif "<!--number_of_benchmarks-->" in j:
+            temp2 = (
+                "<!--number_of_benchmarks--> - Number of benchmarks: "
+                + str(n_benchs)
+                #+ str(len(dat))
+                + "\n"
+            )
+            content.append(temp2)
+        else:
+            content.append(j)
+    # filedata = filedata.replace('<!--table_content-->', temp)
+
+    with open(md_path, "w") as file:
+        file.write("\n".join(content))
+
+
 homepage = [
     "SinglePropertyPrediction-test-formation_energy_peratom-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
@@ -291,183 +453,14 @@ homepage = [
     "SinglePropertyPrediction-test-slme-dft_3d-ES-mae",
     "EigenSolver-test-electron_bands-dft_3d-QC-multimae",
 ]
+update_individual_index_md(md_path="docs/index.md",homepage=homepage)
+update_individual_index_md(md_path="docs/ES/index.md",key='ES')
+update_individual_index_md(md_path="docs/AI/index.md",key='AI')
+update_individual_index_md(md_path="docs/QC/index.md",key='QC')
+update_individual_index_md(md_path="docs/AI/SinglePropertyPrediction/index.md",key='SinglePropertyPrediction')
+update_individual_index_md(md_path="docs/AI/MLFF/index.md",key='MLFF')
+update_individual_index_md(md_path="docs/AI/ImageClass/index.md",key='ImageClass')
+update_individual_index_md(md_path="docs/AI/TextClass/index.md",key='TextClass')
+update_individual_index_md(md_path="docs/ES/SinglePropertyPrediction/index.md",key='SinglePropertyPrediction')
+update_individual_index_md(md_path="docs/QC/EigenSolver/index.md",key='EigenSolver')
 # print("dat", dat)
-print("errors", errors, len(errors))
-selected = defaultdict()
-for name in homepage:
-    for i in dat:
-        name2 = (
-            i["result"]["submod"]
-            + "-"
-            + i["result"]["data_split"]
-            + "-"
-            + i["result"]["prop"]
-            + "-"
-            + i["result"]["dataset"]
-            + "-"
-            + i["result"]["method"]
-            + "-"
-            + i["result"]["metric"]
-        )
-        if name == name2:
-            temp = float(i["result"]["res"])
-            i["result"]["team"] = i["team"]
-            if name not in selected:
-                selected[name] = i["result"]
-            elif (
-                temp > selected[name]["res"] and i["result"]["metric"] == "acc"
-            ):
-                selected[name] = i["result"]
-            elif (
-                temp < selected[name]["res"] and i["result"]["metric"] == "mae"
-            ):
-                selected[name] = i["result"]
-
-
-"""
-for i in dat:
-    temp = float(i["result"]["res"])
-
-    name = (
-        i["result"]["submod"]
-        + "-"
-        + i["result"]["data_split"]
-        + "-"
-        + i["result"]["prop"]
-        + "-"
-        + i["result"]["dataset"]
-        + "-"
-        + i["result"]["method"]
-        + "-"
-        + i["result"]["metric"]
-    )
-    i["result"]["team"] = i["team"]
-    if name in homepage:
-        # print (i['result'])
-        if name not in selected:
-            selected[name] = i["result"]
-        elif temp > selected[name]["res"] and i["result"]["metric"] == "acc":
-            selected[name] = i["result"]
-        elif temp < selected[name]["res"] and i["result"]["metric"] == "mae":
-            selected[name] = i["result"]
-
-"""
-# print("selected", selected)
-temp = (
-    '<!--table_content--><table style="width:100%" id="j_table">'
-    + "<thead><tr>"
-    + "<th>Method</th>"
-    # +'<th><a href="./method' + '" target="_blank">' + 'Method' + "</a></th>"
-    + "<th>Task</th>"
-    + "<th>Property</th>"
-    + "<th>Model name</th>"
-    + "<th>Metric</th>"
-    + "<th>Score</th>"
-    + "<th>Team</th>"
-    + "<th>Dataset</th>"
-    + "<th>Size</th>"
-    + "</tr></thead>"
-)
-for i, j in selected.items():
-    temp = (
-        temp
-        + "<tr>"
-        + "<td>"
-        + '<a href="./'
-        + j["method"]
-        + '" target="_blank">'
-        + j["method"]
-        + "</a>"
-        # + j["method"]
-        + "</td>"
-        + "<td>"
-        + '<a href="./'
-        + j["method"]
-        + "/"
-        + j["submod"]
-        + '" target="_blank">'
-        + j["submod"]
-        + "</a>"
-        # + j["submod"]
-        + "</td>"
-        + "<td>"
-        + '<a href="./'
-        + j["method"]
-        + "/"
-        + j["submod"]
-        + "/"
-        + j["prop"]
-        + '" target="_blank">'
-        + j["prop"]
-        + "</a>"
-        # + j["prop"]
-        + "</td>"
-        + "<td>"
-        + j["team"]
-        + "</td>"
-        + "<td>"
-        + str(j["metric"].upper())
-        + "</td>"
-        + "<td>"
-        + str(j["res"])
-        + "</td>"
-        + "<td>"
-        + str(j["team_name"])
-        + "</td>"
-        + "<td>"
-        + str(j["dataset"])
-        + "</td>"
-        + "<td>"
-        + str(j["dataset_size"])
-        + "</td>"
-        # + "<td>"
-        # + str(j["date_submitted"])
-        # + "</td>"
-        + "</tr>"
-    )
-
-
-md_path = "docs/index.md"
-
-
-with open(md_path, "r") as file:
-    filedata = file.read().splitlines()
-content = []
-for j in filedata:
-    if "<!--table_content-->" in j:
-        content.append("<!--table_content-->")
-    elif "<!--number_of_benchmarks-->" in j:
-        content.append("<!--number_of_benchmarks-->")
-    else:
-        content.append(j)
-with open(md_path, "w") as file:
-    file.write("\n".join(content))
-
-
-with open(md_path, "r") as file:
-    filedata = file.read().splitlines()
-content = []
-for j in filedata:
-    if "<!--table_content-->" in j:
-        temp = temp + j + "</table>"
-        content.append(temp)
-    elif "<!--number_of_benchmarks-->" in j:
-        temp2 = (
-            "<!--number_of_benchmarks--> - Number of benchmarks: "
-            + str(len(dat))
-            + "\n"
-        )
-        content.append(temp2)
-    else:
-        content.append(j)
-# filedata = filedata.replace('<!--table_content-->', temp)
-
-with open(md_path, "w") as file:
-    file.write("\n".join(content))
-    # + "<td>"
-    # + method
-    # + "</td>"
-    # + "<td>"
-    # + str(res['model_name'])
-    # + "</td>"
-# print(temp)
