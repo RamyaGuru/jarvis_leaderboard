@@ -16,6 +16,23 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 clean = True
 errors = []
 
+scaling = {
+    "qm9_std_jctc": {
+        "alpha": 8.172947,
+        "mu": 1.503449,
+        "HOMO": 0.597728,
+        "LUMO": 1.274800,
+        "gap": 1.284114,
+        "R2": 280.472586,
+        "ZPVE": 0.901645,
+        "U0": 10.322918,
+        "U": 10.414332,
+        "H": 10.488418,
+        "G": 9.497589,
+        "Cv": 4.067492,
+    }
+}
+
 
 def get_metric_value(
     submod="",
@@ -79,19 +96,32 @@ def get_metric_value(
     # print('csv_data',csv_data)
     # actual_df.to_csv('actual_df.csv')
     # csv_data.to_csv('csv_data.csv')
+    csv_data['id']=csv_data['id'].astype(str)
+    actual_df['id']=actual_df['id'].astype(str)
     if len(csv_data) != len(actual_df):
         print("Error", csv_path, len(csv_data), len(actual_df))
         errors.append(csv_path)
 
     df = pd.merge(csv_data, actual_df, on="id")
-    # print('csv',csv_path)
-    # print ('df',df)
-    # print('csv_data',csv_data)
-    # print('actual_df',actual_df)
+    #print('csv',csv_path)
+    #print ('df',df)
+    #print('csv_data',csv_data)
+    #print('actual_df',actual_df)
     results["res"] = "na"
     if metric == "mae":
         res = round(mean_absolute_error(df["actual"], df["prediction"]), 3)
         results["res"] = res
+        if 'qm9_std_jctc' in csv_path:
+         #print('scaling[dataset][prop],',scaling[dataset][prop])
+         res = round(scaling[dataset][prop]*mean_absolute_error(df["actual"], df["prediction"]), 3)
+         #res = round(mean_absolute_error(df["actual"]*scaling[dataset][prop], df["prediction"]*scaling[dataset]), 3)
+         results["res"] = res
+         #print(csv_path)
+         #print('mae1',mean_absolute_error(csv_data['target'],csv_data['prediction']))
+         #print('res',res)
+         #print(csv_data)
+         #print(actual_df)
+         #print()
     if metric == "acc":
         # print("ACC")
         # print(df, len(df))
@@ -99,7 +129,7 @@ def get_metric_value(
         # print("res", res)
         results["res"] = res
     if metric == "multimae":
-        #print("csv multimae", csv_path)
+        # print("csv multimae", csv_path)
         maes = []
         for k, v in df.iterrows():
             real = np.array(v["target"].split(";"), dtype="float")
@@ -118,7 +148,7 @@ def get_metric_value(
 
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     # if 'Text' in i:
-    #print(i)
+    # print(i)
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
     submod = temp[0]
@@ -181,7 +211,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
     print(i)
-    #print()
+    # print()
     res = get_metric_value(
         submod=submod,
         csv_path=i,
@@ -203,6 +233,9 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
         + "<tr>"
         + "<td>"
         + team
+        + "</td>"
+        + "<td>"
+        + dataset
         + "</td>"
         # + "<td>"
         # + method
@@ -246,6 +279,8 @@ homepage = [
     "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-optb88vdw_total_energy-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-bulk_modulus_kv-dft_3d-AI-mae",
+    "SinglePropertyPrediction-test-LUMO-qm9_std_jctc-AI-mae",
+    "SinglePropertyPrediction-test-max_co2_adsp-hmof-AI-mae",
     "MLFF-test-energy-alignn_ff_db-AI-mae",
     "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
     "TextClass-test-categories-arXiv-AI-acc",
@@ -329,6 +364,7 @@ temp = (
     + "<th>Metric</th>"
     + "<th>Score</th>"
     + "<th>Team</th>"
+    + "<th>Dataset</th>"
     + "<th>Size</th>"
     + "</tr></thead>"
 )
@@ -377,6 +413,9 @@ for i, j in selected.items():
         + "</td>"
         + "<td>"
         + str(j["team_name"])
+        + "</td>"
+        + "<td>"
+        + str(j["dataset"])
         + "</td>"
         + "<td>"
         + str(j["dataset_size"])

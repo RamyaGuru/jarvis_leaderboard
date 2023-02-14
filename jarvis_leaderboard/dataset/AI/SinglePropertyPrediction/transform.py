@@ -40,6 +40,11 @@ pp = list(
         ]
     )
 )
+# pp=['slme','spillage','shear_modulus_gv']
+
+
+
+pp = ['alpha','G','Cv','gap','H','HOMO','LUMO','mu','R2','U','ZPVE','U0']
 pp = list(
     set(
         [
@@ -53,36 +58,55 @@ pp = list(
         ]
     )
 )
-# pp=['slme','spillage','shear_modulus_gv']
+pp=['e_form','gappbe']
+pp=['gappbe']
+#pp = ['alpha']#,'G','Cv','gap','H','HOMO','LUMO','mu','R2','U','ZPVE','U0']
+dataset='qm9_std_jctc'
+dataset='hmof'
+dataset='megnet'
 x = []
+
 for i in glob.glob(
-    "../../../JARVIS-ALIGNN/Models/17005987/*.zip"
+    #"../../../JARVIS-ALIGNN/Models/qm9_std_jctc/*.zip"
+    #"../../../JARVIS-ALIGNN/Models/17005906/*.zip"
+    "../../../JARVIS-ALIGNN/Models/17005774/*.zip"
+    #"../../../JARVIS-ALIGNN/Models/17005987/*.zip"
     #"../../../JARVIS-ALIGNN/Models/17005681/*.zip"
 ):
     if "supercon" not in i:
         p = (
             i.split("/")[-1]
             .split(".zip")[0]
-            .split("hmof_")[1]
+            #.split("qm9_std_jctc_")[1]
+            .split("mp_")[1]
+            #.split("hmof_")[1]
+            #.split("_alignn")[0]
             .split("_alignnn")[0]
         )
         if p in pp:
             model_zipfile = (
-                "../../../JARVIS-ALIGNN/Models/17005987/hmof_"
-                #"../../../JARVIS-ALIGNN/Models/17005681/hmof_"
+                #"../../../JARVIS-ALIGNN/Models/qm9_std_jctc/qm9_std_jctc_"
+                #"../../../JARVIS-ALIGNN/Models/17005906/qm9_"
+                "../../../JARVIS-ALIGNN/Models/17005774/mp_"
+                #"../../../JARVIS-ALIGNN/Models/17005987/hmof_"
+                #"../../../JARVIS-ALIGNN/Models/17005681/dft_3d_"
                 + p
+                #+ "_alignn.zip"
                 + "_alignnn.zip"
             )
             model_zip = zipfile.ZipFile(model_zipfile)
             print("model_zipfile", model_zipfile, model_zip.namelist())
-            temp = "hmof_" + p + "_alignnn/ids_train_val_test.json"
+            #temp = "qm9_std_jctc_" + p + "_alignn/ids_train_val_test.json"
+            #temp = "qm9_" + p + "_alignn/ids_train_val_test.json"
+            temp = "mp_" + p + "_alignnn/ids_train_val_test.json"
+            #temp = "hmof_" + p + "_alignnn/ids_train_val_test.json"
             #temp = "hmof_" + p + "_alignn/ids_train_val_test.json"
             train_val_test = json.loads(model_zip.read(temp))
 
             dumpjson(filename="ids_train_val_test.json", data=train_val_test)
-            preapre_json_file(prop=p)
+            preapre_json_file(prop=p,dataset=dataset)
             cmd = "rm ids_train_val_test.json"
-            os.system(cmd)
+            #os.system(cmd)
 
             fname = p + ".md"
             f = open(fname, "w")
@@ -91,10 +115,13 @@ for i in glob.glob(
             line = '<h2>Model benchmarks</h2>\n\n<table style="width:100%" id="j_table">\n <thead>\n  <tr>\n    <th>Model name</th>\n   <!-- <th>Method</th>-->\n    <th>MAE</th>\n    <th>Team name</th>\n    <th>Dataset size</th>\n    <th>Date submitted</th>\n    <th>Notes</th>\n  </tr>\n </thead>\n<!--table_content-->\n</table>\n'
             f.write(line)
             f.close()
-            temp = "hmof_" + p + "_alignn/prediction_results_test_set.csv"
+            #temp = "qm9_std_jctc_" + p + "_alignn/prediction_results_test_set.csv"
+            temp = "mp_" + p + "_alignnn/prediction_results_test_set.csv"
             #temp = "hmof_" + p + "_alignnn/prediction_results_test_set.csv"
             p = p.replace("n-", "n_").replace("p-", "p_")  # For n-seebeck etc
-            fname = "SinglePropertyPrediction-test-" + p + "-hmof-AI-mae.csv"
+            #fname = "SinglePropertyPrediction-test-" + p + "-qm9_std_jctc-AI-mae.csv"
+            fname = "SinglePropertyPrediction-test-" + p + "-mp-AI-mae.csv"
+            #fname = "SinglePropertyPrediction-test-" + p + "-hmof-AI-mae.csv"
             #fname = "SinglePropertyPrediction-test-" + p + "-dft_3d-AI-mae.csv"
             f = open(fname, "wb")
             f.write(model_zip.read(temp))
