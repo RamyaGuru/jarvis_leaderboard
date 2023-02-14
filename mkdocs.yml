@@ -31,6 +31,7 @@ site_name: JARVIS-Leaderboard
 site_url: https://github.com/knc6/jarvis_leaderboard
 site_description: 'This project benchmarks performances of various methods for materials science applications using the datasets available in JARVIS-Tools databases.'
 site_author: 'Kamal Choudhary'
+#use_directory_urls: false
 #site_url: 'https://www.andre601.ch/mkdocs-template' # Uncomment to set a canonical URL
 
 # +--------------------------------------------------------------------------------------------------------+

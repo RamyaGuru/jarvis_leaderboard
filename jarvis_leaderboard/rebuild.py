@@ -8,9 +8,11 @@ import json
 from collections import defaultdict
 import collections
 import numpy as np
-
+#from mkdocs import utils
 
 print("Running modify.py script")
+#base_url = utils.get_relative_url('.','.')
+#print ('base_url',base_url)
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
 clean = True
@@ -133,10 +135,12 @@ def get_metric_value(
         # print("res", res)
         results["res"] = res
     if metric == "multimae":
-        # print("csv multimae", csv_path)
+        #print("csv multimae", csv_path)
+        #print ('df',df)
         maes = []
         for k, v in df.iterrows():
-            real = np.array(v["target"].split(";"), dtype="float")
+            real = np.array(v["actual"].split(";"), dtype="float")
+            #real = np.array(v["target"].split(";"), dtype="float")
             pred = np.array(v["prediction"].split(";"), dtype="float")
             m = mean_absolute_error(real, pred)
             maes.append(m)
@@ -337,6 +341,7 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
         + "</tr></thead>"
     )
     for i, j in selected.items():
+     if md_path=='docs/index.md':
         temp = (
             temp
             + "<tr>"
@@ -364,6 +369,129 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
             + "/"
             + j["submod"]
             + "/"
+            + j["prop"]
+            + '" target="_blank">'
+            + j["prop"]
+            + "</a>"
+            # + j["prop"]
+            + "</td>"
+            + "<td>"
+            + j["team"]
+            + "</td>"
+            + "<td>"
+            + str(j["metric"].upper())
+            + "</td>"
+            + "<td>"
+            + str(j["res"])
+            + "</td>"
+            + "<td>"
+            + str(j["team_name"])
+            + "</td>"
+            + "<td>"
+            + str(j["dataset"])
+            + "</td>"
+            + "<td>"
+            + str(j["dataset_size"])
+            + "</td>"
+            # + "<td>"
+            # + str(j["date_submitted"])
+            # + "</td>"
+            + "</tr>"
+        )
+     elif len(md_path.split('/'))==3:
+        base="."
+        temp = (
+            temp
+            + "<tr>"
+            + "<td>"
+            + '<a href= "'+base+'/'
+            #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
+            + j["method"]
+            + '" target="_blank">'
+            + j["method"]
+            + "</a>"
+            # + j["method"]
+            + "</td>"
+            + "<td>"
+            + '<a href= "'+base+'/'
+            #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
+            ##+ j["method"]
+            ##+ "/"
+            + j["submod"]
+            + '" target="_blank">'
+            + j["submod"]
+            + "</a>"
+            # + j["submod"]
+            + "</td>"
+            + "<td>"
+            + '<a href= "'+base+'/'
+            #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
+            ##+ j["method"]
+            ##+ "/"
+            + j["submod"]
+            + "/"
+            #+ "/"
+            + j["prop"]
+            + '" target="_blank">'
+            + j["prop"]
+            + "</a>"
+            # + j["prop"]
+            + "</td>"
+            + "<td>"
+            + j["team"]
+            + "</td>"
+            + "<td>"
+            + str(j["metric"].upper())
+            + "</td>"
+            + "<td>"
+            + str(j["res"])
+            + "</td>"
+            + "<td>"
+            + str(j["team_name"])
+            + "</td>"
+            + "<td>"
+            + str(j["dataset"])
+            + "</td>"
+            + "<td>"
+            + str(j["dataset_size"])
+            + "</td>"
+            # + "<td>"
+            # + str(j["date_submitted"])
+            # + "</td>"
+            + "</tr>"
+        )
+     elif len(md_path.split('/'))==4:
+        base="."
+        temp = (
+            temp
+            + "<tr>"
+            + "<td>"
+            + '<a href= "'+base+'/'
+            #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
+            + j["method"]
+            + '" target="_blank">'
+            + j["method"]
+            + "</a>"
+            # + j["method"]
+            + "</td>"
+            + "<td>"
+            + '<a href= "'+base+'/'
+            #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
+            + j["method"]
+            + "/"
+            + j["submod"]
+            + '" target="_blank">'
+            + j["submod"]
+            + "</a>"
+            # + j["submod"]
+            + "</td>"
+            + "<td>"
+            + '<a href= "'+base+'/'
+            #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
+            ##+ j["method"]
+            ##+ "/"
+            ##+ j["submod"]
+            ##+ "/"
             + j["prop"]
             + '" target="_blank">'
             + j["prop"]
@@ -451,6 +579,7 @@ homepage = [
     "SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-slme-dft_3d-ES-mae",
+    "Spectra-test-dielectric_function-dft_3d-ES-multimae",
     "EigenSolver-test-electron_bands-dft_3d-QC-multimae",
 ]
 update_individual_index_md(md_path="docs/index.md",homepage=homepage)
@@ -462,5 +591,6 @@ update_individual_index_md(md_path="docs/AI/MLFF/index.md",key='MLFF')
 update_individual_index_md(md_path="docs/AI/ImageClass/index.md",key='ImageClass')
 update_individual_index_md(md_path="docs/AI/TextClass/index.md",key='TextClass')
 update_individual_index_md(md_path="docs/ES/SinglePropertyPrediction/index.md",key='SinglePropertyPrediction')
+update_individual_index_md(md_path="docs/ES/Spectra/index.md",key='Spectra')
 update_individual_index_md(md_path="docs/QC/EigenSolver/index.md",key='EigenSolver')
 # print("dat", dat)
