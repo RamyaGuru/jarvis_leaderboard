@@ -192,6 +192,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
         file.write("\n".join(content))
 # jarvis_leaderboard/dataset/AI/dft_3d_exfoliation_energy.json
 dat = []
+md_files = []
 for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     fname = i.split("/")[-1].split(".csv.zip")[0]
     temp = fname.split("-")
@@ -204,6 +205,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     team = i.split("/")[-2]
     md_filename = "../docs/" + method + "/" + submod + "/" + prop + ".md"
     md_path = os.path.join(root_dir, md_filename)
+    md_files.append(md_path)
     notes = ""
     # print(
     #    fname,
@@ -283,6 +285,7 @@ for i in glob.glob("jarvis_leaderboard/benchmarks/*/*.csv.zip"):
     with open(md_path, "w") as file:
         file.write("\n".join(content))
 # print("dat", dat)
+print ('mdfiles',len(set(md_files)))
 
 def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []):
     if not homepage:
@@ -296,6 +299,7 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
     #print("errors", errors, len(errors))
     selected = defaultdict()
     for name in homepage:
+        #print(md_path,name)
         for i in dat:
             name2 = (
                 i["result"]["submod"]
@@ -312,6 +316,8 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
             )
             if name == name2:
                 temp = float(i["result"]["res"])
+                #if md_path!='docs/index.md':
+                #selected[name] = i["result"]
                 i["result"]["team"] = i["team"]
                 if name not in selected:
                     selected[name] = i["result"]
@@ -560,7 +566,7 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
                 "<!--number_of_benchmarks--> - Number of benchmarks: "
                 + str(n_benchs)
                 #+ str(len(dat))
-                + "\n"
+                #+ "\n"
             )
             content.append(temp2)
         else:
@@ -573,20 +579,20 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
 
 homepage = [
     "SinglePropertyPrediction-test-formation_energy_peratom-dft_3d-AI-mae",
-    "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
-    "SinglePropertyPrediction-test-optb88vdw_total_energy-dft_3d-AI-mae",
-    "SinglePropertyPrediction-test-bulk_modulus_kv-dft_3d-AI-mae",
-    "SinglePropertyClass-test-optb88vdw_bandgap-dft_3d-AI-acc",
-    "SinglePropertyPrediction-test-LUMO-qm9_std_jctc-AI-mae",
-    "SinglePropertyPrediction-test-max_co2_adsp-hmof-AI-mae",
+    #"SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
+    #"SinglePropertyPrediction-test-optb88vdw_total_energy-dft_3d-AI-mae",
+    #"SinglePropertyPrediction-test-bulk_modulus_kv-dft_3d-AI-mae",
+    #"SinglePropertyClass-test-optb88vdw_bandgap-dft_3d-AI-acc",
+    #"SinglePropertyPrediction-test-LUMO-qm9_std_jctc-AI-mae",
+    #"SinglePropertyPrediction-test-max_co2_adsp-hmof-AI-mae",
     "MLFF-test-energy-alignn_ff_db-AI-mae",
     "ImageClass-test-bravais_class-stem_2d_image-AI-acc",
     "TextClass-test-categories-arXiv-AI-acc",
-    "SinglePropertyPrediction-test-bulk_modulus-dft_3d-ES-mae",
+    #"SinglePropertyPrediction-test-bulk_modulus-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-bandgap-dft_3d-ES-mae",
-    "SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
+    #"SinglePropertyPrediction-test-epsx-dft_3d-ES-mae",
     "SinglePropertyPrediction-test-Tc_supercon-dft_3d-ES-mae",
-    "SinglePropertyPrediction-test-slme-dft_3d-ES-mae",
+    #"SinglePropertyPrediction-test-slme-dft_3d-ES-mae",
     "Spectra-test-dielectric_function-dft_3d-ES-multimae",
     "EigenSolver-test-electron_bands-dft_3d-QC-multimae",
 ]
