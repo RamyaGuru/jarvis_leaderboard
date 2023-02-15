@@ -129,8 +129,8 @@ def get_metric_value(
             # print(actual_df)
             # print()
     if metric == "acc":
-        # print("ACC")
-        # print(df, len(df))
+        #print("ACC",csv_path)
+        #print(df, len(df))
         res = round(accuracy_score(df["actual"], df["prediction"]), 3)
         # print("res", res)
         results["res"] = res
@@ -325,6 +325,11 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
                     and i["result"]["metric"] == "mae"
                 ):
                     selected[name] = i["result"]
+                elif (
+                    temp < selected[name]["res"]
+                    and i["result"]["metric"] == "multimae"
+                ):
+                    selected[name] = i["result"]
     temp = (
         '<!--table_content--><table style="width:100%" id="j_table">'
         + "<thead><tr>"
@@ -466,6 +471,7 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
             temp
             + "<tr>"
             + "<td>"
+            #+ '<a href= ".'+base+'/'
             + '<a href= "'+base+'/'
             #+ '<a href="http://127.0.0.1:8000/knc6/jarvis_leaderboard/'
             + j["method"]
@@ -523,6 +529,7 @@ def update_individual_index_md(md_path="docs/ES/index.md",key="ES",homepage = []
         )
 
     # md_path = "docs/index.md"
+        #print (md_path,temp)
 
     with open(md_path, "r") as file:
         filedata = file.read().splitlines()
@@ -569,6 +576,7 @@ homepage = [
     "SinglePropertyPrediction-test-optb88vdw_bandgap-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-optb88vdw_total_energy-dft_3d-AI-mae",
     "SinglePropertyPrediction-test-bulk_modulus_kv-dft_3d-AI-mae",
+    "SinglePropertyClass-test-optb88vdw_bandgap-dft_3d-AI-acc",
     "SinglePropertyPrediction-test-LUMO-qm9_std_jctc-AI-mae",
     "SinglePropertyPrediction-test-max_co2_adsp-hmof-AI-mae",
     "MLFF-test-energy-alignn_ff_db-AI-mae",
@@ -587,10 +595,12 @@ update_individual_index_md(md_path="docs/ES/index.md",key='ES')
 update_individual_index_md(md_path="docs/AI/index.md",key='AI')
 update_individual_index_md(md_path="docs/QC/index.md",key='QC')
 update_individual_index_md(md_path="docs/AI/SinglePropertyPrediction/index.md",key='SinglePropertyPrediction')
+update_individual_index_md(md_path="docs/AI/SinglePropertyClass/index.md",key='SinglePropertyClass')
 update_individual_index_md(md_path="docs/AI/MLFF/index.md",key='MLFF')
 update_individual_index_md(md_path="docs/AI/ImageClass/index.md",key='ImageClass')
 update_individual_index_md(md_path="docs/AI/TextClass/index.md",key='TextClass')
 update_individual_index_md(md_path="docs/ES/SinglePropertyPrediction/index.md",key='SinglePropertyPrediction')
 update_individual_index_md(md_path="docs/ES/Spectra/index.md",key='Spectra')
 update_individual_index_md(md_path="docs/QC/EigenSolver/index.md",key='EigenSolver')
+print ('errors',errors)
 # print("dat", dat)
