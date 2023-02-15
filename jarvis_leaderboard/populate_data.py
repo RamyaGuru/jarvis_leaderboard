@@ -77,18 +77,18 @@ if __name__ == "__main__":
         id_prop = os.path.join(output_path, "id_prop.csv")
         f = open(id_prop, "w")
         for i, j in train.items():
-            line = str(i) + ".vasp" + "," + str(j) + "\n"
+            line = str(i)  + "," + str(j) + "\n"
             f.write(line)
             pos_name = os.path.join(output_path, str(i) + ".vasp")
             info[i].write_poscar(pos_name)
         for i, j in val.items():
-            line = str(i) + ".vasp" + "," + str(j) + "\n"
+            line = str(i)  + "," + str(j) + "\n"
             f.write(line)
             pos_name = os.path.join(output_path, str(i) + ".vasp")
             info[i].write_poscar(pos_name)
 
         for i, j in test.items():
-            line = str(i) + ".vasp" + "," + str(j) + "\n"
+            line = str(i) + "," + str(j) + "\n"
             f.write(line)
             pos_name = os.path.join(output_path, str(i) + ".vasp")
             info[i].write_poscar(pos_name)
