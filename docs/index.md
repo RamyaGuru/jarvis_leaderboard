@@ -81,8 +81,12 @@ python setup.py develop
 
      To add a new benchmark, 
 
-     1) Populate the dataset for a particular dataset+property+method+dataset+... e.g.:
-     `python jarvis_leaderboard/populate_data.py --dataset=dft_3d --prop=exfoliation_energy --method=AI -- id_tag=jid --output_path=Out`
+     1) Populate the dataset for a particular exisiting benchmar e.g.:
+     `python jarvis_leaderboard/populate_data.py --benchmark_file SinglePropertyPrediction-test-exfoliation_energy-dft_3d-AI-mae --output_path=Out`
+      This will generate a bunch of POSCAR files and an id_prop.csv file in the Out directory.
+      The code will also print number of training, val and test samples.
+      For methods other than AI method, only test set is provided.
+      The reference data for ES is from experiments only.
 
      2) Develop your model(s) using this dataset, e.g.:
      `pip install alignn`
