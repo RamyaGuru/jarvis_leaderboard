@@ -14,9 +14,14 @@ from jarvis.db.figshare import data
 
 parser = argparse.ArgumentParser(description="JARVIS-Leaderboard")
 parser.add_argument(
-    "--dataset",
-    default="dft_3d",
-    help="JARVIS-Tools based dataset to use.",
+    "--benchmark_file",
+    default="SinglePropertyPrediction-test-exfoliation_energy-dft_3d-AI-mae",
+    help="Benchmarks available in jarvis_leaderboard/benchmarks/*/*.zip",
+)
+parser.add_argument(
+    "--id_tag",
+    default="jid",
+    help="Name of identifier in a dataset: id or jid",
 )
 parser.add_argument(
     "--output_path",
@@ -24,22 +29,6 @@ parser.add_argument(
     help="Path for storing the training data.",
 )
 
-parser.add_argument(
-    "--prop",
-    default="exfoliation_energy",
-    help="Property/key in the dataset to select.",
-)
-
-parser.add_argument("--method", default="AI", help="Select method AI etc...")
-
-parser.add_argument(
-    "--task", default="SinglePropertyPrediction", help="Select task: SinglePropertyPrediction etc...."
-)
-parser.add_argument(
-    "--id_tag",
-    default="jid",
-    help="Item itentfier tag in the dataset.",
-)
 
 
 def get_val(df=None, id_tag="jid", prop="", jv_id="JVASP-14441"):
@@ -49,17 +38,25 @@ def get_val(df=None, id_tag="jid", prop="", jv_id="JVASP-14441"):
 
 if __name__ == "__main__":
     args = parser.parse_args(sys.argv[1:])
-    dataset = args.dataset
+    benchmark_file = args.benchmark_file
+    dataset = benchmark_file.split('-')[3]
     output_path = args.output_path
-    prop = args.prop
-    method = args.method
-    task = args.task
+    prop = benchmark_file.split('-')[2]
+    method = benchmark_file.split('-')[4]
+    task = benchmark_file.split('-')[0]
     id_tag = args.id_tag
+    print ('benchmark_file',benchmark_file)
+    print('dataset',dataset) 
+    print('output_path',output_path)
+    print('property',prop)
+    print('method',method)
+    print('task',task)
+    print('id_tag',id_tag)
     temp = dataset + "_" + prop + ".json.zip"
     temp2 = dataset + "_" + prop + ".json"
     fname = os.path.join("jarvis_leaderboard", "dataset", method, task, temp)
-    print(fname)
-    if dataset in ["dft_3d", "dft_2d"]:
+    print('dataset file to be used',fname)
+    if dataset in ["dft_3d", "dft_2d","qe_tb"]:
         dat = data(dataset)
         info = {}
         for i in dat:
@@ -69,7 +66,9 @@ if __name__ == "__main__":
         train_val_test = json.loads(zp.read(temp2))
         # print(train_val_test)
         train = train_val_test["train"]
-        val = train_val_test["val"]
+        val = {}
+        if 'val' in train_val_test:
+            val = train_val_test["val"]
         test = train_val_test["test"]
         cwd = os.getcwd()
         if not os.path.exists(output_path):
@@ -94,5 +93,8 @@ if __name__ == "__main__":
             pos_name = os.path.join(output_path, str(i) + ".vasp")
             info[i].write_poscar(pos_name)
         f.close()
+        print('number of training samples',len(train))
+        print('number of validation samples',len(val))
+        print('number of test samples',len(test))
         # os.chdir(cwd)
 # jarvis_leaderboard/dataset/AI/PP/dft_3d_exfoliation_energy.json.zip
