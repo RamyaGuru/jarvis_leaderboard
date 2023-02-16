@@ -7,13 +7,13 @@ Now moved to [https://pages.nist.gov/jarvis_leaderboard/](https://pages.nist.gov
 In addition to prediction results, we attempt to capture the underlyig software and hardware frameworks in training models to enhance reproducibility. This project is a part of the [NIST-JARVIS](https://jarvis.nist.gov) infrastructure. -->
 
 
-<!--number_of_benchmarks--> 
+<!number_of_benchmarks--> 
 <!-- - [Learn how to add benchmarks below](#add) -->
 <!-- <p style="text-align:center;"><img align="middle" src="https://www.ctcms.nist.gov/~knc6/images/logo/jarvis-mission.png"  width="40%" height="20%"></p>-->
 
 
 <!-- # Examples of benchmarks -->
-<!--table_content-->
+<!table_content-->
 <!-- <a name="add"></a>
 # Adding benchmarks and datasets
 
