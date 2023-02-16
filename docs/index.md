@@ -1,20 +1,20 @@
 [LICENSE]: https://github.com/usnistgov/jarvis/blob/master/LICENSE.rst
 
-# JARVIS Leaderboard [WIP]
+# JARVIS Leaderboard 
+Now moved to [https://pages.nist.gov/jarvis_leaderboard/](https://pages.nist.gov/jarvis_leaderboard/).
 
-This project provides benchmark-performances of various methods for materials science applications using the datasets available in [JARVIS-Tools databases](https://jarvis-tools.readthedocs.io/en/master/databases.html). Some of the methods are: [Artificial Intelligence (AI)](./AI), [Electronic Structure (ES)](./ES) and [Qunatum Computation (QC](./QC)). There are a variety of properties included in the benchmark.
-In addition to prediction results, we attempt to capture the underlyig software and hardware frameworks in training models to enhance reproducibility. This project is a part of the [NIST-JARVIS](https://jarvis.nist.gov) infrastructure.
+<!-- This project provides benchmark-performances of various methods for materials science applications using the datasets available in [JARVIS-Tools databases](https://jarvis-tools.readthedocs.io/en/master/databases.html). Some of the methods are: [Artificial Intelligence (AI)](./AI), [Electronic Structure (ES)](./ES) and [Qunatum Computation (QC](./QC)). There are a variety of properties included in the benchmark.
+In addition to prediction results, we attempt to capture the underlyig software and hardware frameworks in training models to enhance reproducibility. This project is a part of the [NIST-JARVIS](https://jarvis.nist.gov) infrastructure. -->
 
 
-<!--number_of_benchmarks--> - Number of benchmarks: 89
-- [Learn how to add benchmarks below](#add)
+<!--number_of_benchmarks--> 
+<!-- - [Learn how to add benchmarks below](#add) -->
 <!-- <p style="text-align:center;"><img align="middle" src="https://www.ctcms.nist.gov/~knc6/images/logo/jarvis-mission.png"  width="40%" height="20%"></p>-->
 
 
-# Examples of benchmarks
-<!--table_content--><table style="width:100%" id="j_table"><thead><tr><th>Method</th><th>Task</th><th>Property</th><th>Model name</th><th>Metric</th><th>Score</th><th>Team</th><th>Dataset</th><th>Size</th></tr></thead><tr><td><a href="./AI" target="_blank">AI</a></td><td><a href="./AI/SinglePropertyPrediction" target="_blank">SinglePropertyPrediction</a></td><td><a href="./AI/SinglePropertyPrediction/formation_energy_peratom" target="_blank">formation_energy_peratom</a></td><td><a href="https://www.nature.com/articles/s41524-021-00650-1" target="_blank">alignn_model</a></td><td>MAE</td><td>0.033</td><td>JARVIS</td><td>dft_3d</td><td>55713</td></tr><tr><td><a href="./AI" target="_blank">AI</a></td><td><a href="./AI/MLFF" target="_blank">MLFF</a></td><td><a href="./AI/MLFF/energy" target="_blank">energy</a></td><td><a href="https://pubs.rsc.org/en/content/articlehtml/2023/dd/d2dd00096b" target="_blank">alignnff_wt0.1</a></td><td>MAE</td><td>0.034</td><td>JARVIS</td><td>alignn_ff_db</td><td>307111</td></tr><tr><td><a href="./AI" target="_blank">AI</a></td><td><a href="./AI/ImageClass" target="_blank">ImageClass</a></td><td><a href="./AI/ImageClass/bravais_class" target="_blank">bravais_class</a></td><td><a href="https://arxiv.org/abs/2212.02586" target="_blank">densenet_model</a></td><td>ACC</td><td>0.83</td><td>JARVIS</td><td>stem_2d_image</td><td>9150</td></tr><tr><td><a href="./AI" target="_blank">AI</a></td><td><a href="./AI/TextClass" target="_blank">TextClass</a></td><td><a href="./AI/TextClass/categories" target="_blank">categories</a></td><td><a href="https://arxiv.org/abs/2209.08203" target="_blank">logisticreg_model</a></td><td>ACC</td><td>0.86</td><td>JARVIS</td><td>arXiv</td><td>100994</td></tr><tr><td><a href="./ES" target="_blank">ES</a></td><td><a href="./ES/SinglePropertyPrediction" target="_blank">SinglePropertyPrediction</a></td><td><a href="./ES/SinglePropertyPrediction/bandgap" target="_blank">bandgap</a></td><td><a href="https://pubs.acs.org/doi/abs/10.1021/acs.chemmater.9b02166" target="_blank">vasp_tbmbj</a></td><td>MAE</td><td>0.498</td><td>JARVIS</td><td>dft_3d</td><td>54</td></tr><tr><td><a href="./ES" target="_blank">ES</a></td><td><a href="./ES/SinglePropertyPrediction" target="_blank">SinglePropertyPrediction</a></td><td><a href="./ES/SinglePropertyPrediction/Tc_supercon" target="_blank">Tc_supercon</a></td><td><a href="https://www.nature.com/articles/s41524-022-00933-1" target="_blank">qe_pbesol_gbrv</a></td><td>MAE</td><td>3.378</td><td>JARVIS</td><td>dft_3d</td><td>14</td></tr><tr><td><a href="./ES" target="_blank">ES</a></td><td><a href="./ES/Spectra" target="_blank">Spectra</a></td><td><a href="./ES/Spectra/dielectric_function" target="_blank">dielectric_function</a></td><td><a href="https://pubs.acs.org/doi/abs/10.1021/acs.chemmater.9b02166" target="_blank">vasp_tbmbj</a></td><td>MULTIMAE</td><td>11.52</td><td>JARVIS</td><td>dft_3d</td><td>4</td></tr><tr><td><a href="./QC" target="_blank">QC</a></td><td><a href="./QC/EigenSolver" target="_blank">EigenSolver</a></td><td><a href="./QC/EigenSolver/electron_bands" target="_blank">electron_bands</a></td><td><a href="https://iopscience.iop.org/article/10.1088/1361-648X/ac1154/meta" target="_blank">qiskit_vqd_SU2</a></td><td>MULTIMAE</td><td>0.003</td><td>JARVIS</td><td>dft_3d</td><td>1</td></tr><!--table_content--></table>
-
-<a name="add"></a>
+<!-- # Examples of benchmarks -->
+<!--table_content-->
+<!-- <a name="add"></a>
 # Adding benchmarks and datasets
 
 To get started, first fork this repository by clicking on the [`Fork`](https://github.com/knc6/jarvis_leaderboard/fork) button. 
@@ -91,4 +91,4 @@ python setup.py develop
 
 # License
    This template is served under the NIST license.  
-   Read the [LICENSE] file for more info.
+   Read the [LICENSE] file for more info. -->
